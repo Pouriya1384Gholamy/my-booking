@@ -74,7 +74,7 @@ const NAV_ITEMS = [
 ];
 
 /* ============================================================
-   🧭 کامپوننت Navigation — چسبیده به پایین header
+   🧭 کامپوننت Navigation — Fixed پایین صفحه
    ============================================================ */
 
 function Navigation() {
@@ -83,8 +83,8 @@ function Navigation() {
   return (
     <nav
       className="
-        absolute left-1/2 -translate-x-1/2
-        bottom-0
+        fixed left-1/2 -translate-x-1/2
+        bottom-4
         w-[calc(100%-2.5rem)] max-w-[460px]
         flex items-center justify-between
         h-20
@@ -226,550 +226,551 @@ function Header() {
   };
 
   return (
-    /* ✅ header باید relative باشه تا Navigation absolute درست بشینه */
-    <header className="relative bg-[#FDF6F0] dark:bg-[#1A1A1A] transition-colors duration-500">
-      {/* ==================================================
-          این div overflow-hidden داره → Navigation نباید داخلش باشه
-         ================================================== */}
-      <div
-        className="
-          relative overflow-hidden
-          rounded-b-[32px]
-          sm:rounded-b-[42px]
-          bg-gradient-to-br
-          from-[#FDF6F0]
-          via-[#FAEDE6]
-          to-[#F5DCD5]
-          dark:from-[#1F1F1F]
-          dark:via-[#252525]
-          dark:to-[#2A2A2A]
-          px-4 pt-5 pb-24
-          text-[#5D3A3A]
-          dark:text-[#F4F0E8]
-          transition-colors duration-500
-          sm:px-6 sm:pt-7 sm:pb-28
-          md:px-10 md:pb-32
-          lg:px-16
-        "
-      >
-        {/* ================= BACKGROUND DECORATIONS ================= */}
-
+    <>
+      <header className="bg-[#FDF6F0] dark:bg-[#1A1A1A] transition-colors duration-500">
         <div
           className="
-            pointer-events-none
-            absolute -right-28 -top-28
-            h-64 w-64
-            rounded-full
-            bg-[#E8B4B8]/20
-            dark:bg-[#C9A87C]/10
-            blur-3xl
-            sm:h-80 sm:w-80
+            relative overflow-hidden
+            rounded-b-[32px]
+            sm:rounded-b-[42px]
+            bg-gradient-to-br
+            from-[#FDF6F0]
+            via-[#FAEDE6]
+            to-[#F5DCD5]
+            dark:from-[#1F1F1F]
+            dark:via-[#252525]
+            dark:to-[#2A2A2A]
+            px-4 pt-5 pb-24
+            text-[#5D3A3A]
+            dark:text-[#F4F0E8]
+            transition-colors duration-500
+            sm:px-6 sm:pt-7 sm:pb-28
+            md:px-10 md:pb-32
+            lg:px-16
           "
-        />
-
-        <div
-          className="
-            pointer-events-none
-            absolute -left-24 top-40
-            h-56 w-56
-            rounded-full
-            bg-[#C9A87C]/10
-            dark:bg-[#E8B4B8]/5
-            blur-3xl
-            sm:h-72 sm:w-72
-          "
-        />
-
-        <div
-          className="
-            pointer-events-none
-            absolute -right-16 -top-16
-            h-48 w-48
-            rounded-full
-            border border-[#C9A87C]/25
-            dark:border-[#C9A87C]/15
-            sm:h-64 sm:w-64
-          "
-        />
-
-        <div
-          className="
-            pointer-events-none
-            absolute -right-6 -top-6
-            h-28 w-28
-            rounded-full
-            border border-[#C9A87C]/15
-            dark:border-[#C9A87C]/10
-            sm:h-40 sm:w-40
-          "
-        />
-
-        <div className="relative z-10 mx-auto max-w-6xl">
-          {/* ================= TOP BAR ================= */}
+        >
+          {/* ================= BACKGROUND DECORATIONS ================= */}
 
           <div
             className="
-              mb-5 sm:mb-6
-              flex items-center justify-between
-              border-b
-              border-[#5D3A3A]/8
-              dark:border-white/10
-              pb-4 sm:pb-5
-              transition-colors duration-500
+              pointer-events-none
+              absolute -right-28 -top-28
+              h-64 w-64
+              rounded-full
+              bg-[#E8B4B8]/20
+              dark:bg-[#C9A87C]/10
+              blur-3xl
+              sm:h-80 sm:w-80
             "
-            dir="rtl"
-          >
-            {/* LEFT ACTIONS */}
+          />
 
-            <div className="flex items-center gap-1.5 sm:gap-2">
-              {/* NOTIFICATION */}
+          <div
+            className="
+              pointer-events-none
+              absolute -left-24 top-40
+              h-56 w-56
+              rounded-full
+              bg-[#C9A87C]/10
+              dark:bg-[#E8B4B8]/5
+              blur-3xl
+              sm:h-72 sm:w-72
+            "
+          />
 
-              <button
-                className="
-                  relative
-                  flex h-9 w-9 sm:h-10 sm:w-10
-                  items-center justify-center
-                  rounded-full
-                  border border-[#5D3A3A]/10
-                  dark:border-white/10
-                  bg-white/70
-                  dark:bg-white/5
-                  text-[#5D3A3A]
-                  dark:text-[#F4F0E8]
-                  shadow-sm
-                  transition
-                  hover:border-[#C9A87C]/50
-                  hover:text-[#C9A87C]
-                  hover:shadow-md
-                  active:scale-95
-                "
-                aria-label="اعلان‌ها"
-              >
-                <FaBell className="text-[10px] sm:text-xs" />
+          <div
+            className="
+              pointer-events-none
+              absolute -right-16 -top-16
+              h-48 w-48
+              rounded-full
+              border border-[#C9A87C]/25
+              dark:border-[#C9A87C]/15
+              sm:h-64 sm:w-64
+            "
+          />
 
-                <span
-                  className="
-                    absolute
-                    right-1.5 top-1.5
-                    sm:right-2 sm:top-2
-                    h-1.5 w-1.5
-                    rounded-full
-                    bg-[#E8B4B8]
-                    ring-2
-                    ring-[#FDF6F0]
-                    dark:ring-[#1F1F1F]
-                  "
-                />
-              </button>
+          <div
+            className="
+              pointer-events-none
+              absolute -right-6 -top-6
+              h-28 w-28
+              rounded-full
+              border border-[#C9A87C]/15
+              dark:border-[#C9A87C]/10
+              sm:h-40 sm:w-40
+            "
+          />
 
-              {/* FAVORITE */}
-
-              <button
-                className="
-                  flex h-9 w-9 sm:h-10 sm:w-10
-                  items-center justify-center
-                  rounded-full
-                  border border-[#5D3A3A]/10
-                  dark:border-white/10
-                  bg-white/70
-                  dark:bg-white/5
-                  text-[#5D3A3A]
-                  dark:text-[#F4F0E8]
-                  shadow-sm
-                  transition
-                  hover:border-[#E8B4B8]/50
-                  hover:text-[#E8B4B8]
-                  hover:shadow-md
-                  active:scale-95
-                "
-                aria-label="علاقه‌مندی‌ها"
-              >
-                <FaHeart className="text-[10px] sm:text-xs" />
-              </button>
-
-              {/* THEME TOGGLE */}
-
-              <button
-                onClick={toggleTheme}
-                aria-label="تغییر تم"
-                className="
-                  relative
-                  flex h-9 w-9 sm:h-10 sm:w-10
-                  items-center justify-center
-                  overflow-hidden
-                  rounded-full
-                  border border-[#C9A87C]/30
-                  dark:border-[#C9A87C]/40
-                  bg-gradient-to-br
-                  from-[#FDF6F0]
-                  to-[#F5DCD5]
-                  dark:from-[#2A2A2A]
-                  dark:to-[#1F1F1F]
-                  text-[#C9A87C]
-                  shadow-sm
-                  transition-all duration-500
-                  hover:border-[#C9A87C]/70
-                  hover:shadow-md
-                  active:scale-95
-                "
-              >
-                <FaSun
-                  className={`
-                    absolute
-                    text-xs sm:text-sm
-                    text-[#C9A87C]
-                    transition-all duration-500
-                    ${
-                      darkMode
-                        ? "rotate-90 scale-0 opacity-0"
-                        : "rotate-0 scale-100 opacity-100"
-                    }
-                  `}
-                />
-
-                <FaMoon
-                  className={`
-                    absolute
-                    text-xs sm:text-sm
-                    text-[#E8B4B8]
-                    transition-all duration-500
-                    ${
-                      darkMode
-                        ? "rotate-0 scale-100 opacity-100"
-                        : "-rotate-90 scale-0 opacity-0"
-                    }
-                  `}
-                />
-              </button>
-            </div>
-
-            {/* BRAND */}
-
-            <div className="text-center">
-              <p
-                className="
-                  font-serif
-                  text-base sm:text-lg
-                  tracking-[0.12em]
-                  text-[#5D3A3A]
-                  dark:text-[#F4F0E8]
-                  transition-colors duration-500
-                "
-              >
-                MAHOUR
-              </p>
-
-              <p
-                className="
-                  mt-0.5
-                  text-[7px] sm:text-[8px]
-                  tracking-[0.35em]
-                  text-[#C9A87C]
-                "
-              >
-                BEAUTY STUDIO
-              </p>
-            </div>
-
-            {/* LOGO */}
+          <div className="relative z-10 mx-auto max-w-6xl">
+            {/* ================= TOP BAR ================= */}
 
             <div
               className="
-                flex h-9 w-9 sm:h-10 sm:w-10
-                items-center justify-center
-                rounded-full
-                border border-[#C9A87C]/50
-                bg-white/60
-                dark:bg-white/5
-                text-[#C9A87C]
-                shadow-sm
+                mb-5 sm:mb-6
+                flex items-center justify-between
+                border-b
+                border-[#5D3A3A]/8
+                dark:border-white/10
+                pb-4 sm:pb-5
                 transition-colors duration-500
               "
+              dir="rtl"
             >
-              <span className="font-serif text-base sm:text-lg">M</span>
-            </div>
-          </div>
+              {/* LEFT ACTIONS */}
 
-          {/* ================= PROFILE ================= */}
+              <div className="flex items-center gap-1.5 sm:gap-2">
+                {/* NOTIFICATION */}
 
-          <div
-            className="
-              mb-5 sm:mb-7
-              flex items-center
-              gap-2.5 sm:gap-3
-              rounded-[20px]
-              sm:rounded-[24px]
-              border border-white/60
-              dark:border-white/10
-              bg-white/70
-              dark:bg-white/5
-              p-2.5 sm:p-3
-              shadow-[0_8px_30px_rgba(201,168,124,0.12)]
-              dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]
-              backdrop-blur-md
-              transition-colors duration-500
-            "
-            dir="rtl"
-          >
-            {/* AVATAR */}
-
-            <div className="relative shrink-0">
-              <div
-                className="
-                  rounded-[14px]
-                  sm:rounded-[18px]
-                  bg-gradient-to-br
-                  from-[#E8B4B8]
-                  to-[#C9A87C]
-                  p-[2px]
-                "
-              >
-                <img
-                  src="https://i.pravatar.cc/150?img=1"
-                  alt="آواتار"
+                <button
                   className="
-                    h-11 w-11
-                    sm:h-14 sm:w-14
-                    md:h-16 md:w-16
-                    rounded-[12px]
-                    sm:rounded-[16px]
-                    object-cover
+                    relative
+                    flex h-9 w-9 sm:h-10 sm:w-10
+                    items-center justify-center
+                    rounded-full
+                    border border-[#5D3A3A]/10
+                    dark:border-white/10
+                    bg-white/70
+                    dark:bg-white/5
+                    text-[#5D3A3A]
+                    dark:text-[#F4F0E8]
+                    shadow-sm
+                    transition
+                    hover:border-[#C9A87C]/50
+                    hover:text-[#C9A87C]
+                    hover:shadow-md
+                    active:scale-95
                   "
-                />
+                  aria-label="اعلان‌ها"
+                >
+                  <FaBell className="text-[10px] sm:text-xs" />
+
+                  <span
+                    className="
+                      absolute
+                      right-1.5 top-1.5
+                      sm:right-2 sm:top-2
+                      h-1.5 w-1.5
+                      rounded-full
+                      bg-[#E8B4B8]
+                      ring-2
+                      ring-[#FDF6F0]
+                      dark:ring-[#1F1F1F]
+                    "
+                  />
+                </button>
+
+                {/* FAVORITE */}
+
+                <button
+                  className="
+                    flex h-9 w-9 sm:h-10 sm:w-10
+                    items-center justify-center
+                    rounded-full
+                    border border-[#5D3A3A]/10
+                    dark:border-white/10
+                    bg-white/70
+                    dark:bg-white/5
+                    text-[#5D3A3A]
+                    dark:text-[#F4F0E8]
+                    shadow-sm
+                    transition
+                    hover:border-[#E8B4B8]/50
+                    hover:text-[#E8B4B8]
+                    hover:shadow-md
+                    active:scale-95
+                  "
+                  aria-label="علاقه‌مندی‌ها"
+                >
+                  <FaHeart className="text-[10px] sm:text-xs" />
+                </button>
+
+                {/* THEME TOGGLE */}
+
+                <button
+                  onClick={toggleTheme}
+                  aria-label="تغییر تم"
+                  className="
+                    relative
+                    flex h-9 w-9 sm:h-10 sm:w-10
+                    items-center justify-center
+                    overflow-hidden
+                    rounded-full
+                    border border-[#C9A87C]/30
+                    dark:border-[#C9A87C]/40
+                    bg-gradient-to-br
+                    from-[#FDF6F0]
+                    to-[#F5DCD5]
+                    dark:from-[#2A2A2A]
+                    dark:to-[#1F1F1F]
+                    text-[#C9A87C]
+                    shadow-sm
+                    transition-all duration-500
+                    hover:border-[#C9A87C]/70
+                    hover:shadow-md
+                    active:scale-95
+                  "
+                >
+                  <FaSun
+                    className={`
+                      absolute
+                      text-xs sm:text-sm
+                      text-[#C9A87C]
+                      transition-all duration-500
+                      ${
+                        darkMode
+                          ? "rotate-90 scale-0 opacity-0"
+                          : "rotate-0 scale-100 opacity-100"
+                      }
+                    `}
+                  />
+
+                  <FaMoon
+                    className={`
+                      absolute
+                      text-xs sm:text-sm
+                      text-[#E8B4B8]
+                      transition-all duration-500
+                      ${
+                        darkMode
+                          ? "rotate-0 scale-100 opacity-100"
+                          : "-rotate-90 scale-0 opacity-0"
+                      }
+                    `}
+                  />
+                </button>
               </div>
 
-              <span
-                className="
-                  absolute
-                  -bottom-0.5 -left-0.5
-                  sm:-bottom-1 sm:-left-1
-                  h-3.5 w-3.5
-                  sm:h-4 sm:w-4
-                  rounded-full
-                  border-2
-                  border-white
-                  dark:border-[#1F1F1F]
-                  bg-[#9DB89C]
-                "
-              />
-            </div>
+              {/* BRAND */}
 
-            {/* PROFILE TEXT */}
-
-            <div className="min-w-0 flex-1">
-              <div className="flex items-center gap-1.5">
-                <h2
+              <div className="text-center">
+                <p
                   className="
-                    text-sm sm:text-base md:text-lg
-                    font-bold
+                    font-serif
+                    text-base sm:text-lg
+                    tracking-[0.12em]
                     text-[#5D3A3A]
                     dark:text-[#F4F0E8]
                     transition-colors duration-500
                   "
                 >
-                  سلام، مریم
-                </h2>
+                  MAHOUR
+                </p>
 
-                <FaHeart className="text-[10px] sm:text-xs text-[#E8B4B8]" />
-              </div>
-
-              <p
-                className="
-                  mt-0.5 sm:mt-1
-                  truncate
-                  text-[10px] sm:text-xs md:text-sm
-                  text-[#8B6F6F]
-                  dark:text-white/50
-                  transition-colors duration-500
-                "
-              >
-                برای یک تجربه زیبایی جدید آماده‌ای؟
-              </p>
-            </div>
-
-            {/* PROFILE BUTTON */}
-
-            <button
-              className="
-                hidden sm:flex
-                shrink-0
-                items-center
-                gap-1.5
-                rounded-xl
-                border border-[#C9A87C]/30
-                bg-white/50
-                dark:bg-white/5
-                px-2.5 sm:px-3
-                py-1.5 sm:py-2
-                text-[10px] sm:text-[11px]
-                text-[#C9A87C]
-                transition
-                hover:bg-[#C9A87C]/10
-              "
-            >
-              پروفایل
-              <FaChevronLeft className="text-[7px] sm:text-[8px]" />
-            </button>
-          </div>
-
-          {/* ================= HERO CONTENT ================= */}
-
-          <div
-            className="
-              grid
-              gap-6 sm:gap-7
-              md:grid-cols-[1fr_290px]
-              md:items-center
-              md:gap-8
-              lg:grid-cols-[1fr_340px]
-            "
-            dir="rtl"
-          >
-            {/* TEXT + SEARCH */}
-
-            <div>
-              <p
-                className="
-                  mb-2.5 sm:mb-3
-                  flex items-center gap-2
-                  text-[8px] sm:text-[9px]
-                  font-medium
-                  tracking-[0.22em]
-                  text-[#C9A87C]
-                "
-              >
-                <span className="h-px w-5 sm:w-7 bg-[#C9A87C]" />
-                BEAUTY EXPERIENCE
-              </p>
-
-              <p
-                className="
-                  mt-3 sm:mt-4
-                  max-w-lg
-                  text-[11px]
-                  sm:text-xs
-                  md:text-sm
-                  leading-5
-                  sm:leading-6
-                  md:leading-7
-                  text-[#8B6F6F]
-                  dark:text-white/50
-                  transition-colors duration-500
-                "
-              >
-                خدمات مورد علاقه‌ات را پیدا کن، متخصص مورد نظرت را انتخاب کن و
-                وقتت را به راحتی رزرو کن.
-              </p>
-
-              {/* SEARCH */}
-
-              <div className="mt-5 sm:mt-6 flex gap-2 sm:gap-2.5">
-                <div
+                <p
                   className="
-                    group
-                    flex min-h-[46px]
-                    sm:min-h-[52px]
-                    flex-1
-                    items-center
-                    gap-2 sm:gap-3
-                    rounded-2xl
-                    border border-[#5D3A3A]/8
-                    dark:border-white/10
-                    bg-white
-                    dark:bg-[#2A2A2A]
-                    px-3 sm:px-4
-                    shadow-[0_10px_30px_rgba(201,168,124,0.15)]
-                    dark:shadow-[0_10px_30px_rgba(0,0,0,0.3)]
-                    transition-colors duration-500
-                    focus-within:ring-4
-                    focus-within:ring-[#E8B4B8]/20
+                    mt-0.5
+                    text-[7px] sm:text-[8px]
+                    tracking-[0.35em]
+                    text-[#C9A87C]
                   "
                 >
-                  <FaSearch
-                    className="
-                      shrink-0
-                      text-xs sm:text-sm
-                      text-[#C9A87C]
-                      transition
-                      group-focus-within:scale-110
-                    "
-                  />
+                  BEAUTY STUDIO
+                </p>
+              </div>
 
-                  <input
-                    type="text"
-                    placeholder="جستجو در خدمات سالن..."
+              {/* LOGO */}
+
+              <div
+                className="
+                  flex h-9 w-9 sm:h-10 sm:w-10
+                  items-center justify-center
+                  rounded-full
+                  border border-[#C9A87C]/50
+                  bg-white/60
+                  dark:bg-white/5
+                  text-[#C9A87C]
+                  shadow-sm
+                  transition-colors duration-500
+                "
+              >
+                <span className="font-serif text-base sm:text-lg">M</span>
+              </div>
+            </div>
+
+            {/* ================= PROFILE ================= */}
+
+            <div
+              className="
+                mb-5 sm:mb-7
+                flex items-center
+                gap-2.5 sm:gap-3
+                rounded-[20px]
+                sm:rounded-[24px]
+                border border-white/60
+                dark:border-white/10
+                bg-white/70
+                dark:bg-white/5
+                p-2.5 sm:p-3
+                shadow-[0_8px_30px_rgba(201,168,124,0.12)]
+                dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]
+                backdrop-blur-md
+                transition-colors duration-500
+              "
+              dir="rtl"
+            >
+              {/* AVATAR */}
+
+              <div className="relative shrink-0">
+                <div
+                  className="
+                    rounded-[14px]
+                    sm:rounded-[18px]
+                    bg-gradient-to-br
+                    from-[#E8B4B8]
+                    to-[#C9A87C]
+                    p-[2px]
+                  "
+                >
+                  <img
+                    src="https://i.pravatar.cc/150?img=1"
+                    alt="آواتار"
                     className="
-                      min-w-0
-                      flex-1
-                      bg-transparent
-                      text-right
-                      text-xs sm:text-sm
-                      text-[#5D3A3A]
-                      dark:text-[#F4F0E8]
-                      outline-none
-                      placeholder:text-[#B8A8A8]
-                      dark:placeholder:text-white/30
-                      transition-colors duration-500
+                      h-11 w-11
+                      sm:h-14 sm:w-14
+                      md:h-16 md:w-16
+                      rounded-[12px]
+                      sm:rounded-[16px]
+                      object-cover
                     "
                   />
                 </div>
 
-                {/* FILTER BUTTON */}
-
-                <button
+                <span
                   className="
-                    flex
-                    h-[46px] w-[46px]
-                    sm:h-[52px] sm:w-[52px]
-                    lg:w-14
-                    shrink-0
-                    items-center justify-center
-                    rounded-2xl
-                    bg-gradient-to-br
-                    from-[#C9A87C]
-                    to-[#B8956A]
-                    text-white
-                    shadow-[0_10px_25px_rgba(201,168,124,0.4)]
-                    transition
-                    hover:-translate-y-0.5
-                    hover:shadow-[0_14px_30px_rgba(201,168,124,0.5)]
-                    active:scale-95
+                    absolute
+                    -bottom-0.5 -left-0.5
+                    sm:-bottom-1 sm:-left-1
+                    h-3.5 w-3.5
+                    sm:h-4 sm:w-4
+                    rounded-full
+                    border-2
+                    border-white
+                    dark:border-[#1F1F1F]
+                    bg-[#9DB89C]
                   "
-                  aria-label="فیلترها"
-                >
-                  <FaSlidersH className="text-xs sm:text-sm" />
-                </button>
+                />
               </div>
+
+              {/* PROFILE TEXT */}
+
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <h2
+                    className="
+                      text-sm sm:text-base md:text-lg
+                      font-bold
+                      text-[#5D3A3A]
+                      dark:text-[#F4F0E8]
+                      transition-colors duration-500
+                    "
+                  >
+                    سلام، مریم
+                  </h2>
+
+                  <FaHeart className="text-[10px] sm:text-xs text-[#E8B4B8]" />
+                </div>
+
+                <p
+                  className="
+                    mt-0.5 sm:mt-1
+                    truncate
+                    text-[10px] sm:text-xs md:text-sm
+                    text-[#8B6F6F]
+                    dark:text-white/50
+                    transition-colors duration-500
+                  "
+                >
+                  برای یک تجربه زیبایی جدید آماده‌ای؟
+                </p>
+              </div>
+
+              {/* PROFILE BUTTON */}
+
+              <button
+                className="
+                  hidden sm:flex
+                  shrink-0
+                  items-center
+                  gap-1.5
+                  rounded-xl
+                  border border-[#C9A87C]/30
+                  bg-white/50
+                  dark:bg-white/5
+                  px-2.5 sm:px-3
+                  py-1.5 sm:py-2
+                  text-[10px] sm:text-[11px]
+                  text-[#C9A87C]
+                  transition
+                  hover:bg-[#C9A87C]/10
+                "
+              >
+                پروفایل
+                <FaChevronLeft className="text-[7px] sm:text-[8px]" />
+              </button>
             </div>
 
-            {/* ================= BEAUTY DASHBOARD ================= */}
+            {/* ================= HERO CONTENT ================= */}
 
-            <BeautyDashboardCard />
+            <div
+              className="
+                grid
+                gap-6 sm:gap-7
+                md:grid-cols-[1fr_290px]
+                md:items-center
+                md:gap-8
+                lg:grid-cols-[1fr_340px]
+              "
+              dir="rtl"
+            >
+              {/* TEXT + SEARCH */}
+
+              <div>
+                <p
+                  className="
+                    mb-2.5 sm:mb-3
+                    flex items-center gap-2
+                    text-[8px] sm:text-[9px]
+                    font-medium
+                    tracking-[0.22em]
+                    text-[#C9A87C]
+                  "
+                >
+                  <span className="h-px w-5 sm:w-7 bg-[#C9A87C]" />
+                  BEAUTY EXPERIENCE
+                </p>
+
+                <p
+                  className="
+                    mt-3 sm:mt-4
+                    max-w-lg
+                    text-[11px]
+                    sm:text-xs
+                    md:text-sm
+                    leading-5
+                    sm:leading-6
+                    md:leading-7
+                    text-[#8B6F6F]
+                    dark:text-white/50
+                    transition-colors duration-500
+                  "
+                >
+                  خدمات مورد علاقه‌ات را پیدا کن، متخصص مورد نظرت را انتخاب کن و
+                  وقتت را به راحتی رزرو کن.
+                </p>
+
+                {/* SEARCH */}
+
+                <div className="mt-5 sm:mt-6 flex gap-2 sm:gap-2.5">
+                  <div
+                    className="
+                      group
+                      flex min-h-[46px]
+                      sm:min-h-[52px]
+                      flex-1
+                      items-center
+                      gap-2 sm:gap-3
+                      rounded-2xl
+                      border border-[#5D3A3A]/8
+                      dark:border-white/10
+                      bg-white
+                      dark:bg-[#2A2A2A]
+                      px-3 sm:px-4
+                      shadow-[0_10px_30px_rgba(201,168,124,0.15)]
+                      dark:shadow-[0_10px_30px_rgba(0,0,0,0.3)]
+                      transition-colors duration-500
+                      focus-within:ring-4
+                      focus-within:ring-[#E8B4B8]/20
+                    "
+                  >
+                    <FaSearch
+                      className="
+                        shrink-0
+                        text-xs sm:text-sm
+                        text-[#C9A87C]
+                        transition
+                        group-focus-within:scale-110
+                      "
+                    />
+
+                    <input
+                      type="text"
+                      placeholder="جستجو در خدمات سالن..."
+                      className="
+                        min-w-0
+                        flex-1
+                        bg-transparent
+                        text-right
+                        text-xs sm:text-sm
+                        text-[#5D3A3A]
+                        dark:text-[#F4F0E8]
+                        outline-none
+                        placeholder:text-[#B8A8A8]
+                        dark:placeholder:text-white/30
+                        transition-colors duration-500
+                      "
+                    />
+                  </div>
+
+                  {/* FILTER BUTTON */}
+
+                  <button
+                    className="
+                      flex
+                      h-[46px] w-[46px]
+                      sm:h-[52px] sm:w-[52px]
+                      lg:w-14
+                      shrink-0
+                      items-center justify-center
+                      rounded-2xl
+                      bg-gradient-to-br
+                      from-[#C9A87C]
+                      to-[#B8956A]
+                      text-white
+                      shadow-[0_10px_25px_rgba(201,168,124,0.4)]
+                      transition
+                      hover:-translate-y-0.5
+                      hover:shadow-[0_14px_30px_rgba(201,168,124,0.5)]
+                      active:scale-95
+                    "
+                    aria-label="فیلترها"
+                  >
+                    <FaSlidersH className="text-xs sm:text-sm" />
+                  </button>
+                </div>
+              </div>
+
+              {/* ================= BEAUTY DASHBOARD ================= */}
+
+              <BeautyDashboardCard />
+            </div>
           </div>
+
+          {/* ================= BOTTOM CURVE ================= */}
+
+          <div
+            className="
+              absolute
+              bottom-[-1px]
+              left-[-2%]
+              h-8 sm:h-10 md:h-12
+              w-[104%]
+              rounded-[50%_50%_0_0]
+              bg-[#FDF6F0]
+              dark:bg-[#1A1A1A]
+              transition-colors duration-500
+            "
+          />
         </div>
-
-        {/* ================= BOTTOM CURVE ================= */}
-
-        <div
-          className="
-            absolute
-            bottom-[-1px]
-            left-[-2%]
-            h-8 sm:h-10 md:h-12
-            w-[104%]
-            rounded-[50%_50%_0_0]
-            bg-[#FDF6F0]
-            dark:bg-[#1A1A1A]
-            transition-colors duration-500
-          "
-        />
-      </div>
+      </header>
 
       {/* ==================================================
-          ✅ Navigation — چسبیده به پایین header
+          ✅ Navigation — Fixed، همیشه پایین صفحه
          ================================================== */}
       <Navigation />
-    </header>
+
+      {/* 👇 فضای خالی زیر محتوا، چون نوار fixed روی محتوا شناوره */}
+      <div className="h-28" aria-hidden="true" />
+    </>
   );
 }
 
