@@ -74,7 +74,7 @@ const NAV_ITEMS = [
 ];
 
 /* ============================================================
-   🧭 کامپوننت Navigation (داخل همین فایل)
+   🧭 کامپوننت Navigation — چسبیده به پایین header
    ============================================================ */
 
 function Navigation() {
@@ -84,7 +84,7 @@ function Navigation() {
     <nav
       className="
         absolute left-1/2 -translate-x-1/2
-        bottom-0 translate-y-1/2
+        bottom-0
         w-[calc(100%-2.5rem)] max-w-[460px]
         flex items-center justify-between
         h-20
@@ -94,7 +94,7 @@ function Navigation() {
         shadow-[0_10px_25px_rgba(0,0,0,0.15)]
         dark:shadow-[0_10px_25px_rgba(0,0,0,0.5)]
         transition-colors duration-500
-        z-30
+        z-50
       "
       dir="rtl"
     >
@@ -766,8 +766,7 @@ function Header() {
       </div>
 
       {/* ==================================================
-          ✅ Navigation — داخل header (که relative هست)
-          ولی بیرون از div با overflow-hidden
+          ✅ Navigation — چسبیده به پایین header
          ================================================== */}
       <Navigation />
     </header>
@@ -779,11 +778,6 @@ function Header() {
    ============================================================ */
 
 function BeautyDashboardCard() {
-  /*
-    این مقدار بعداً می‌تواند از API / Firebase / Backend بیاید.
-    false: کاربر فعلاً رزروی ندارد.
-    true: کاربر رزرو بعدی دارد.
-  */
   const hasNextBooking = false;
 
   const [activeTab, setActiveTab] = useState("today");
@@ -809,9 +803,7 @@ function BeautyDashboardCard() {
       "
       dir="rtl"
     >
-      {/* ==================================================
-          CARD HEADER
-         ================================================== */}
+      {/* CARD HEADER */}
       <div className="flex items-center justify-between mb-3.5 sm:mb-4">
         <div>
           <p className="text-[8px] sm:text-[9px] tracking-[0.22em] text-[#C9A87C]">
@@ -835,9 +827,7 @@ function BeautyDashboardCard() {
         </div>
       </div>
 
-      {/* ==================================================
-          TABS
-         ================================================== */}
+      {/* TABS */}
       <div className="flex gap-1 rounded-2xl bg-[#FDF6F0]/60 dark:bg-white/5 p-1">
         <DashboardTab
           active={activeTab === "today"}
@@ -859,9 +849,7 @@ function BeautyDashboardCard() {
         />
       </div>
 
-      {/* ==================================================
-          TAB CONTENT
-         ================================================== */}
+      {/* TAB CONTENT */}
       <div className="mt-3.5 sm:mt-4">
         {activeTab === "today" && <TodayTab hasNextBooking={hasNextBooking} />}
         {activeTab === "status" && <StatusTab />}
@@ -904,7 +892,6 @@ function DashboardTab({ active, onClick, icon, label }) {
 function TodayTab({ hasNextBooking }) {
   return (
     <div className="animate-slideIn">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[8px] sm:text-[9px] tracking-[0.18em] text-[#C9A87C]">
@@ -919,14 +906,12 @@ function TodayTab({ hasNextBooking }) {
         </span>
       </div>
 
-      {/* Stats */}
       <div className="mt-2.5 grid grid-cols-3 gap-2">
         <DashboardStat value="۳۴" label="نوبت آزاد" />
         <DashboardStat value="۱۲" label="متخصص فعال" />
         <DashboardStat value="۸" label="خدمت ویژه" />
       </div>
 
-      {/* Reservation Box */}
       <div
         className="
           mt-3 rounded-2xl
@@ -1024,7 +1009,6 @@ function TodayTab({ hasNextBooking }) {
 function StatusTab() {
   return (
     <div className="animate-slideIn">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[8px] sm:text-[9px] tracking-[0.18em] text-[#C9A87C]">
@@ -1037,7 +1021,6 @@ function StatusTab() {
         <span className="text-[9px] font-bold text-[#6B8A6A]">عالی ✨</span>
       </div>
 
-      {/* Status Badge */}
       <div
         className="
           mt-3 flex items-center gap-3
@@ -1066,7 +1049,6 @@ function StatusTab() {
         </div>
       </div>
 
-      {/* Details */}
       <div className="mt-2.5 grid grid-cols-2 gap-2">
         <div className="rounded-xl bg-[#FDF6F0] dark:bg-white/5 px-2.5 py-2">
           <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">
@@ -1086,7 +1068,6 @@ function StatusTab() {
         </div>
       </div>
 
-      {/* Progress */}
       <div className="mt-3">
         <div className="flex items-center justify-between">
           <span className="text-[8px] sm:text-[9px] text-[#8B6F6F] dark:text-white/40">
@@ -1114,7 +1095,6 @@ function StatusTab() {
 function TrendingTab() {
   return (
     <div className="animate-slideIn">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <p className="text-[8px] sm:text-[9px] tracking-[0.18em] text-[#C9A87C]">
@@ -1127,7 +1107,6 @@ function TrendingTab() {
         <span className="text-[8px] text-[#C9A87C]">محبوب‌ترین‌ها</span>
       </div>
 
-      {/* List */}
       <div className="mt-2.5 space-y-2">
         <TrendingService
           icon={<FaSpa />}
@@ -1217,7 +1196,6 @@ function TrendingService({ icon, title, bookings, rank }) {
         hover:translate-x-[-2px]
       "
     >
-      {/* ICON */}
       <div
         className="
           flex h-8 w-8 shrink-0
@@ -1230,7 +1208,6 @@ function TrendingService({ icon, title, bookings, rank }) {
         <span className="text-[10px]">{icon}</span>
       </div>
 
-      {/* CONTENT */}
       <div className="min-w-0 flex-1">
         <p
           className="
@@ -1256,7 +1233,6 @@ function TrendingService({ icon, title, bookings, rank }) {
         </p>
       </div>
 
-      {/* RANK BADGE */}
       <div
         className={`
           flex h-5 w-5 shrink-0
