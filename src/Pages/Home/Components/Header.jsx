@@ -82,116 +82,145 @@ function Navigation() {
 
   return (
     <nav
-      className="
-        fixed left-1/2 -translate-x-1/2
-        bottom-4
-        w-[calc(100%-2.5rem)] max-w-[460px]
-        flex items-center justify-between
-        h-20
-        rounded-[20px]
-        bg-white dark:bg-[#2A2A2A]
-        px-[15px]
-        shadow-[0_10px_25px_rgba(0,0,0,0.15)]
-        dark:shadow-[0_10px_25px_rgba(0,0,0,0.5)]
-        transition-colors duration-500
-        z-50
-      "
       dir="rtl"
+      aria-label="ناوبری اصلی"
+      style={{
+        position: "fixed",
+        left: "50%",
+        bottom: "12px",
+        transform: "translateX(-50%)",
+        width: "calc(100% - 24px)",
+        maxWidth: "460px",
+        height: "72px",
+        zIndex: 9999,
+      }}
+      className="
+        flex items-center
+        rounded-[24px]
+        border border-white/70
+        dark:border-white/10
+        bg-white/95
+        dark:bg-[#252525]/95
+        px-2 sm:px-3
+        shadow-[0_12px_40px_rgba(74,46,178,0.18)]
+        dark:shadow-[0_12px_40px_rgba(0,0,0,0.55)]
+        backdrop-blur-xl
+        supports-[backdrop-filter]:bg-white/80
+        dark:supports-[backdrop-filter]:bg-[#252525]/80
+        box-border
+      "
     >
-      {NAV_ITEMS.map((item) => {
-        const isActive = activeTab === item.id;
+      <div className="flex h-full w-full items-center justify-between">
+        {NAV_ITEMS.map((item) => {
+          const isActive = activeTab === item.id;
 
-        return (
-          <button
-            key={item.id}
-            onClick={() => setActiveTab(item.id)}
-            className="
-              group relative flex flex-1
-              h-full flex-col items-center justify-center
-              pt-2.5
-              cursor-pointer
-              transition-all duration-300
-            "
-            aria-label={item.label}
-            aria-current={isActive ? "page" : undefined}
-          >
-            {/* ICON WRAPPER */}
-            <div
-              className={`
-                relative z-[2]
-                flex h-[45px] w-[45px]
-                items-center justify-center
-                rounded-full
-                transition-all duration-[400ms]
-                ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
-                ${
-                  isActive
-                    ? "bg-[#4a2eb2] dark:bg-[#C9A87C] text-white -translate-y-7 shadow-[0_5px_15px_rgba(74,46,178,0.4)] dark:shadow-[0_5px_15px_rgba(201,168,124,0.4)]"
-                    : "text-[#8b8b8b] dark:text-white/40 group-hover:text-[#4a2eb2] dark:group-hover:text-[#C9A87C]"
-                }
-              `}
+          return (
+            <button
+              key={item.id}
+              type="button"
+              onClick={() => setActiveTab(item.id)}
+              aria-label={item.label}
+              aria-current={isActive ? "page" : undefined}
+              className="
+                group
+                relative
+                flex h-full min-w-0 flex-1
+                flex-col items-center justify-center
+                outline-none
+                transition-all duration-300
+                active:scale-95
+              "
             >
-              {isActive && (
+              {/* آیکن */}
+              <div
+                className={`
+                  relative z-10
+                  flex h-[42px] w-[42px] sm:h-[44px] sm:w-[44px]
+                  items-center justify-center
+                  rounded-full
+                  transition-all duration-300
+                  ${
+                    isActive
+                      ? `
+                        -translate-y-[17px]
+                        bg-gradient-to-br
+                        from-[#5A3BC4] to-[#4A2EB2]
+                        dark:from-[#D7B985] dark:to-[#B8956A]
+                        text-white
+                        shadow-[0_8px_22px_rgba(74,46,178,0.38)]
+                        dark:shadow-[0_8px_22px_rgba(201,168,124,0.35)]
+                      `
+                      : `
+                        text-[#8B8B8B]
+                        dark:text-white/40
+                        group-hover:text-[#4A2EB2]
+                        dark:group-hover:text-[#C9A87C]
+                      `
+                  }
+                `}
+              >
+                {isActive && (
+                  <span
+                    className="
+                      absolute -inset-[5px] -z-10
+                      rounded-full
+                      bg-white dark:bg-[#252525]
+                      shadow-[0_3px_12px_rgba(0,0,0,0.08)]
+                      dark:shadow-[0_3px_12px_rgba(0,0,0,0.35)]
+                    "
+                  />
+                )}
+
                 <span
                   className="
-                    absolute -inset-1
-                    rounded-full
-                    bg-white dark:bg-[#2A2A2A]
-                    -z-10
-                    shadow-[0_4px_10px_rgba(0,0,0,0.05)]
-                    dark:shadow-[0_4px_10px_rgba(0,0,0,0.3)]
+                    [&>svg]:h-[21px] [&>svg]:w-[21px]
+                    sm:[&>svg]:h-[22px] sm:[&>svg]:w-[22px]
+                    [&>svg]:fill-none
+                    [&>svg]:stroke-current
+                    [&>svg]:stroke-[1.8]
+                    [&>svg]:[stroke-linecap:round]
+                    [&>svg]:[stroke-linejoin:round]
                   "
-                />
-              )}
+                >
+                  {item.icon}
+                </span>
+              </div>
 
+              {/* متن */}
               <span
-                className="
-                  [&>svg]:h-6 [&>svg]:w-6
-                  [&>svg]:fill-none
-                  [&>svg]:stroke-current
-                  [&>svg]:stroke-2
-                  [&>svg]:[stroke-linecap:round]
-                  [&>svg]:[stroke-linejoin:round]
-                  [&>svg]:transition-all [&>svg]:duration-300
-                "
+                className={`
+                  absolute bottom-[9px]
+                  whitespace-nowrap
+                  text-[10px] sm:text-[11px]
+                  transition-all duration-300
+                  ${
+                    isActive
+                      ? "font-bold text-[#2D2D2D] dark:text-[#F4F0E8]"
+                      : "font-medium text-[#8B8B8B] dark:text-white/40"
+                  }
+                `}
               >
-                {item.icon}
+                {item.label}
               </span>
-            </div>
 
-            {/* TEXT */}
-            <span
-              className={`
-                mt-[5px]
-                text-[11px] font-semibold
-                transition-all duration-300
-                ${
-                  isActive
-                    ? "text-[#2d2d2d] dark:text-[#F4F0E8] font-bold -translate-y-2.5 opacity-100"
-                    : "text-[#8b8b8b] dark:text-white/40 opacity-80"
-                }
-              `}
-            >
-              {item.label}
-            </span>
-
-            {/* INDICATOR */}
-            <span
-              className={`
-                mt-1 h-[3px] w-5
-                rounded-[10px]
-                bg-[#4a2eb2] dark:bg-[#C9A87C]
-                transition-all duration-300
-                ${
-                  isActive
-                    ? "opacity-100 scale-x-100 -translate-y-2.5"
-                    : "opacity-0 scale-x-0"
-                }
-              `}
-            />
-          </button>
-        );
-      })}
+              {/* خط فعال */}
+              <span
+                className={`
+                  absolute bottom-[3px]
+                  h-[3px] rounded-full
+                  bg-[#4A2EB2] dark:bg-[#C9A87C]
+                  transition-all duration-300
+                  ${
+                    isActive
+                      ? "w-5 opacity-100"
+                      : "w-0 opacity-0"
+                  }
+                `}
+              />
+            </button>
+          );
+        })}
+      </div>
     </nav>
   );
 }
@@ -769,7 +798,7 @@ function Header() {
       <Navigation />
 
       {/* 👇 فضای خالی زیر محتوا، چون نوار fixed روی محتوا شناوره */}
-      <div className="h-28" aria-hidden="true" />
+      <div className="h-[100px] sm:h-[110px]" aria-hidden="true" />
     </>
   );
 }
