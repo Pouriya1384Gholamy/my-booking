@@ -129,8 +129,8 @@ function Navigation() {
                 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
                 ${
                   isActive
-                    ? "bg-[#c73454] dark:bg-[#daa259] text-white -translate-y-5 shadow-[0_5px_15px_rgba(74,46,178,0.4)] dark:shadow-[0_5px_15px_rgba(201,168,124,0.4)]"
-                    : "text-[#8b8b8b] dark:text-white/40 group-hover:text-[#4a2eb2] dark:group-hover:text-[#C9A87C]"
+                    ? "bg-transparent dark:bg-[#daa259] text-[#C9A87C] dark:text-white -translate-y-5 shadow-none dark:shadow-[0_5px_15px_rgba(201,168,124,0.4)]"
+                    : "text-[#8b8b8b] dark:text-white/40 group-hover:text-[#C9A87C] dark:group-hover:text-[#C9A87C]"
                 }
               `}
             >
@@ -138,8 +138,9 @@ function Navigation() {
                 <span
                   className="
                     absolute -inset-1 rounded-full
-                    bg-white dark:bg-[#2A2A2A] -z-10
-                    shadow-[0_4px_10px_rgba(0,0,0,0.05)]
+                    bg-[#FDF6F0] dark:bg-[#2A2A2A] -z-10
+                    border border-[#C9A87C]/40
+                    shadow-[0_4px_10px_rgba(201,168,124,0.15)]
                     dark:shadow-[0_4px_10px_rgba(0,0,0,0.3)]
                   "
                 />
@@ -166,7 +167,7 @@ function Navigation() {
                 mt-[5px] text-[11px] font-semibold transition-all duration-300
                 ${
                   isActive
-                    ? "text-[#2d2d2d] dark:text-[#F4F0E8] font-bold -translate-y-2.5 opacity-100"
+                    ? "text-[#C9A87C] dark:text-[#F4F0E8] font-bold -translate-y-2.5 opacity-100"
                     : "text-[#8b8b8b] dark:text-white/40 opacity-80"
                 }
               `}
@@ -178,7 +179,7 @@ function Navigation() {
             <span
               className={`
                 mt-1 h-[3px] w-5 rounded-[10px]
-                bg-[#4a2eb2] dark:bg-[#C9A87C]
+                bg-[#C9A87C] dark:bg-[#C9A87C]
                 transition-all duration-300
                 ${
                   isActive
@@ -627,8 +628,6 @@ function Header() {
               {/* TEXT + SEARCH */}
 
               <div>
-              
-
                 {/* SEARCH */}
 
                 <div className="mt-2 sm:mt-4 flex gap-2 sm:gap-2.5">
