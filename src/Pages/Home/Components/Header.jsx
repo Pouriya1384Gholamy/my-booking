@@ -627,19 +627,7 @@ function Header() {
               {/* TEXT + SEARCH */}
 
               <div>
-                <p
-                  className="
-                    mb-2.5 sm:mb-3
-                    flex items-center gap-2
-                    text-[8px] sm:text-[9px]
-                    font-medium
-                    tracking-[0.22em]
-                    text-[#C9A87C]
-                  "
-                >
-                  <span className="h-px w-5 sm:w-7 bg-[#C9A87C]" />
-                  BEAUTY EXPERIENCE
-                </p>
+              
 
                 {/* SEARCH */}
 
