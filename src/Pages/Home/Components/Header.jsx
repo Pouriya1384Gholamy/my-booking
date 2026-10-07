@@ -641,25 +641,6 @@ function Header() {
                   BEAUTY EXPERIENCE
                 </p>
 
-                <p
-                  className="
-                    mt-3 sm:mt-4
-                    max-w-lg
-                    text-[11px]
-                    sm:text-xs
-                    md:text-sm
-                    leading-5
-                    sm:leading-6
-                    md:leading-7
-                    text-[#8B6F6F]
-                    dark:text-white/50
-                    transition-colors duration-500
-                  "
-                >
-                  خدمات مورد علاقه‌ات را پیدا کن، متخصص مورد نظرت را انتخاب کن و
-                  وقتت را به راحتی رزرو کن.
-                </p>
-
                 {/* SEARCH */}
 
                 <div className="mt-5 sm:mt-6 flex gap-2 sm:gap-2.5">
