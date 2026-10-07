@@ -123,13 +123,13 @@ function Navigation() {
             <div
               className={`
                 relative z-[2]
-                flex h-[45px] w-[45px]
+                flex h-[40px] w-[40px]
                 items-center justify-center rounded-full
                 transition-all duration-[400ms]
                 ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
                 ${
                   isActive
-                    ? "bg-[#4a2eb2] dark:bg-[#C9A87C] text-white -translate-y-7 shadow-[0_5px_15px_rgba(74,46,178,0.4)] dark:shadow-[0_5px_15px_rgba(201,168,124,0.4)]"
+                    ? "bg-[#c73454] dark:bg-[#daa259] text-white -translate-y-5 shadow-[0_5px_15px_rgba(74,46,178,0.4)] dark:shadow-[0_5px_15px_rgba(201,168,124,0.4)]"
                     : "text-[#8b8b8b] dark:text-white/40 group-hover:text-[#4a2eb2] dark:group-hover:text-[#C9A87C]"
                 }
               `}
