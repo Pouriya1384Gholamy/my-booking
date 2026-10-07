@@ -897,7 +897,7 @@ function TodayTab({ hasNextBooking }) {
           <div className="flex items-center gap-2">
             <div
               className="
-                flex h-9 w-9 sm:h-10 sm:w-10 shrink-0
+                flex h-8 w-8 sm:h-10 sm:w-10 shrink-0
                 items-center justify-center rounded-xl
                 bg-white/80 dark:bg-white/10 text-[#C9A87C]
               "
@@ -946,7 +946,7 @@ function TodayTab({ hasNextBooking }) {
             </div>
           </div>
         ) : (
-          <div className="mt-3">
+          <div className="mt-2">
             <p className="text-[8px] sm:text-[9px] leading-4 text-[#8B6F6F] dark:text-white/40">
               وقتشه یه تجربه جدید برای خودت انتخاب کنی ✨
             </p>
@@ -964,7 +964,7 @@ function TodayTab({ hasNextBooking }) {
                 active:scale-[0.98]
               "
             >
-              <span>اولین رزرو من</span>
+              <span>رزرو نوبت</span>
               <FaChevronLeft className="text-[8px]" />
             </button>
           </div>
@@ -990,7 +990,7 @@ function StatusTab() {
             وضعیت زیبایی تو
           </h4>
         </div>
-        <span className="text-[9px] font-bold text-[#6B8A6A]">عالی ✨</span>
+        <span className="text-[9px] font-bold text-[#6B8A6A]">عالی </span>
       </div>
 
       <div
