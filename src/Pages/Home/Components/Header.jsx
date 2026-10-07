@@ -897,7 +897,7 @@ function TodayTab({ hasNextBooking }) {
           <div className="flex items-center gap-2">
             <div
               className="
-                flex h-8 w-8 sm:h-10 sm:w-10 shrink-0
+                flex h-8.5 w-8.5 sm:h-10 sm:w-10 shrink-0
                 items-center justify-center rounded-xl
                 bg-white/80 dark:bg-white/10 text-[#C9A87C]
               "
