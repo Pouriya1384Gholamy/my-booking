@@ -643,7 +643,7 @@ function Header() {
 
                 {/* SEARCH */}
 
-                <div className="mt-5 sm:mt-6 flex gap-2 sm:gap-2.5">
+                <div className="mt-2 sm:mt-4 flex gap-2 sm:gap-2.5">
                   <div
                     className="
                       group
@@ -816,7 +816,7 @@ function BeautyDashboardCard() {
         <DashboardTab
           active={activeTab === "today"}
           onClick={() => setActiveTab("today")}
-          icon={<FaClock className="text-[9px] sm:text-[10px]" />}
+          icon={<FaClock className="text-[12px] sm:text-[10px]" />}
           label="امروز"
         />
         <DashboardTab
@@ -968,7 +968,7 @@ function TodayTab({ hasNextBooking }) {
                 rounded-xl
                 bg-gradient-to-br from-[#C9A87C] to-[#B8956A]
                 px-3 py-2.5
-                text-[9px] sm:text-[10px] font-medium text-white
+                text-[10px] sm:text-[18px] font-medium text-white
                 shadow-[0_8px_20px_rgba(201,168,124,0.25)]
                 transition
                 hover:-translate-y-0.5
