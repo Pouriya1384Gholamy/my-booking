@@ -126,7 +126,6 @@ function ServiceArch({ service, selected, onSelect }) {
         }
       `}
     >
-      {/* قاب داخلی (حس قاب آینه) */}
       <span
         aria-hidden="true"
         className={`
@@ -141,7 +140,6 @@ function ServiceArch({ service, selected, onSelect }) {
         `}
       />
 
-      {/* نشان داغ بودن — روی رأس قوس */}
       {service.hot && !selected && (
         <span
           aria-label="پرطرفدار"
@@ -158,7 +156,6 @@ function ServiceArch({ service, selected, onSelect }) {
         </span>
       )}
 
-      {/* نشان انتخاب‌شده */}
       {selected && (
         <span
           className="
@@ -173,7 +170,6 @@ function ServiceArch({ service, selected, onSelect }) {
       )}
 
       <span className="relative z-10 flex h-full flex-col items-center justify-end gap-1 pb-3.5 sm:pb-4">
-        {/* مدالیون آیکون */}
         <span
           className={`
             mb-1.5 flex h-12 w-12 sm:h-14 sm:w-14
@@ -229,7 +225,6 @@ function PopularServices() {
       dir="rtl"
       aria-labelledby="popular-services-title"
     >
-      {/* ---------- هدر بخش ---------- */}
       <div className="mb-4 sm:mb-5 flex items-end justify-between">
         <div className="flex items-center gap-2.5">
           <span
@@ -268,7 +263,6 @@ function PopularServices() {
         </button>
       </div>
 
-      {/* ---------- لیست افقی با اسنپ و محو شدن لبه‌ها ---------- */}
       <div
         className="
           -mx-4 sm:-mx-6 md:mx-0
@@ -295,7 +289,6 @@ function PopularServices() {
         </div>
       </div>
 
-      {/* ---------- نوار رزرو سریع — بعد از انتخاب ---------- */}
       {selected && (
         <div
           key={selected.id}
@@ -417,11 +410,15 @@ const STYLISTS = [
 ];
 
 /* ============================================================
-   💄 کارت آرایشگر
+   💄 کارت آرایشگر — با انیمیشن قلب پرنده
    ============================================================ */
 
 function StylistCard({ stylist }) {
   const [liked, setLiked] = useState(false);
+  const [flyingHearts, setFlyingHearts] = useState([]);
+  const [bursting, setBursting] = useState(false);
+  const heartBtnRef = useRef(null);
+
   const filledStars = Math.round(stylist.rating);
 
   const ratingText = stylist.rating.toLocaleString("fa-IR", {
@@ -429,9 +426,52 @@ function StylistCard({ stylist }) {
   });
   const reviewsText = stylist.reviews.toLocaleString("fa-IR");
 
-  // وقتی کارت هاور یا فوکوس بشه (روی موبایل با تپ) بخش جزئیات باز می‌شه
-  const reveal =
-    "group-hover:opacity-100 group-focus-within:opacity-100";
+  const reveal = "group-hover:opacity-100 group-focus-within:opacity-100";
+
+  /* 🎯 هندل کلیک روی قلب */
+  const handleLike = (e) => {
+    e.stopPropagation();
+
+    const willLike = !liked;
+    setLiked(willLike);
+
+    if (willLike) {
+      // 1️⃣ موقعیت کلیک
+      const clickX = e.clientX;
+      const clickY = e.clientY;
+
+      // 2️⃣ موقعیت آیکون قلب
+      const btnRect = heartBtnRef.current?.getBoundingClientRect();
+      if (!btnRect) return;
+
+      const targetX = btnRect.left + btnRect.width / 2;
+      const targetY = btnRect.top + btnRect.height / 2;
+
+      const deltaX = targetX - clickX;
+      const deltaY = targetY - clickY;
+
+      // 3️⃣ ساخت قلب پرنده
+      const id = Date.now() + Math.random();
+      const newHeart = {
+        id,
+        startX: clickX,
+        startY: clickY,
+        deltaX,
+        deltaY,
+      };
+
+      setFlyingHearts((prev) => [...prev, newHeart]);
+
+      // 4️⃣ حذف بعد از پایان انیمیشن
+      setTimeout(() => {
+        setFlyingHearts((prev) => prev.filter((h) => h.id !== id));
+      }, 950);
+
+      // 5️⃣ افکت پالس روی آیکون
+      setBursting(true);
+      setTimeout(() => setBursting(false), 700);
+    }
+  };
 
   return (
     <article
@@ -465,10 +505,10 @@ function StylistCard({ stylist }) {
         "
       />
 
-      {/* گرادیانت تیره‌ی پایه برای خوانایی متن */}
+      {/* گرادیانت تیره پایه */}
       <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-black/10" />
 
-      {/* گرادیانت طلایی برند — با هاور ظاهر می‌شه */}
+      {/* گرادیانت طلایی هنگام هاور */}
       <div
         className={`
           pointer-events-none absolute inset-0
@@ -479,7 +519,7 @@ function StylistCard({ stylist }) {
         `}
       />
 
-      {/* ---------- نشان وضعیت (بالا راست) ---------- */}
+      {/* ---------- نشان وضعیت ---------- */}
       <span
         className={`
           absolute right-2.5 top-2.5
@@ -498,28 +538,50 @@ function StylistCard({ stylist }) {
         {stylist.available ? "آزاد امروز" : "نوبت فردا"}
       </span>
 
-      {/* ---------- علاقه‌مندی (بالا چپ) ---------- */}
+      {/* ---------- 🌟 دکمه لایک با انیمیشن ---------- */}
       <button
+        ref={heartBtnRef}
         type="button"
-        onClick={() => setLiked((v) => !v)}
+        onClick={handleLike}
         aria-pressed={liked}
-        aria-label="افزودن به علاقه‌مندی‌ها"
+        aria-label={liked ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
         className="
-          absolute left-2.5 top-2.5
+          absolute left-2.5 top-2.5 z-20
           flex h-8 w-8 items-center justify-center
           rounded-full
           bg-white/20 backdrop-blur-md
-          transition hover:bg-white/35 active:scale-90
+          transition-all duration-300
+          hover:bg-white/35 active:scale-90
         "
       >
-        <FaHeart
-          className={`text-xs transition-colors duration-300 ${
-            liked ? "text-[#E8B4B8]" : "text-white"
-          }`}
-        />
+        {/* پالس انفجاری هنگام لایک */}
+        {bursting && (
+          <span
+            className="
+              pointer-events-none absolute inset-0 rounded-full
+              bg-[#E8B4B8]/50
+              animate-heart-burst
+            "
+          />
+        )}
+
+        {/* آیکون قلب */}
+        <span
+          className={`
+            relative z-10 inline-flex
+            ${bursting && liked ? "animate-heart-pop" : ""}
+          `}
+        >
+          <FaHeart
+            className={`
+              text-xs transition-colors duration-300
+              ${liked ? "text-[#E8B4B8]" : "text-white"}
+            `}
+          />
+        </span>
       </button>
 
-      {/* ---------- اطلاعات پایین کارت ---------- */}
+      {/* ---------- اطلاعات پایین ---------- */}
       <div className="absolute inset-x-0 bottom-0 p-3.5 sm:p-4 text-white">
         <h4 className="truncate text-sm sm:text-base font-bold drop-shadow-md">
           {stylist.name}
@@ -559,7 +621,7 @@ function StylistCard({ stylist }) {
           <span className="truncate">{stylist.role}</span>
         </span>
 
-        {/* بخش جزئیات — با هاور از پایین باز می‌شه */}
+        {/* بخش جزئیات */}
         <div
           className="
             grid grid-rows-[0fr] opacity-0
@@ -598,6 +660,30 @@ function StylistCard({ stylist }) {
           </div>
         </div>
       </div>
+
+      {/* ============================================================
+          🚀 قلب‌های پرنده — از طریق Portal به body
+          ============================================================ */}
+      {typeof document !== "undefined" &&
+        createPortal(
+          <>
+            {flyingHearts.map((h) => (
+              <span
+                key={h.id}
+                className="pointer-events-none fixed z-[99999] animate-fly-to-heart"
+                style={{
+                  left: h.startX,
+                  top: h.startY,
+                  "--dx": `${h.deltaX}px`,
+                  "--dy": `${h.deltaY}px`,
+                }}
+              >
+                <FaHeart className="text-2xl text-[#E8B4B8] drop-shadow-[0_0_12px_rgba(232,180,184,0.9)]" />
+              </span>
+            ))}
+          </>,
+          document.body
+        )}
     </article>
   );
 }
@@ -609,7 +695,6 @@ function StylistCard({ stylist }) {
 function StylistsSlider() {
   const trackRef = useRef(null);
 
-  // جهت بصری: -1 = به چپ (آیتم‌های بعدی در RTL) ، 1 = به راست
   const scrollByCard = (dir) => {
     const el = trackRef.current;
     if (!el) return;
@@ -633,7 +718,6 @@ function StylistsSlider() {
       dir="rtl"
       aria-labelledby="stylists-title"
     >
-      {/* ---------- هدر ---------- */}
       <div className="mb-4 sm:mb-5 flex items-end justify-between">
         <div className="flex items-center gap-2.5">
           <span
@@ -673,7 +757,6 @@ function StylistsSlider() {
         </div>
       </div>
 
-      {/* ---------- ترک اسلایدر ---------- */}
       <div
         className="
           -mx-4 sm:-mx-6 md:mx-0
@@ -700,7 +783,7 @@ function StylistsSlider() {
 }
 
 /* ============================================================
-   🧭 کامپوننت Navigation — با Portal مستقیم توی <body>
+   🧭 کامپوننت Navigation
    ============================================================ */
 
 function Navigation() {
@@ -744,7 +827,6 @@ function Navigation() {
             aria-label={item.label}
             aria-current={isActive ? "page" : undefined}
           >
-            {/* ICON WRAPPER */}
             <div
               className={`
                 relative z-[2]
@@ -786,7 +868,6 @@ function Navigation() {
               </span>
             </div>
 
-            {/* TEXT */}
             <span
               className={`
                 mt-[5px] text-[11px] font-semibold transition-all duration-300
@@ -800,7 +881,6 @@ function Navigation() {
               {item.label}
             </span>
 
-            {/* INDICATOR */}
             <span
               className={`
                 mt-1 h-[3px] w-5 rounded-[10px]
@@ -876,16 +956,13 @@ function Header() {
             lg:px-16
           "
         >
-          {/* ================= BACKGROUND DECORATIONS ================= */}
-
           <div className="pointer-events-none absolute -right-28 -top-28 h-64 w-64 rounded-full bg-[#E8B4B8]/20 dark:bg-[#C9A87C]/10 blur-3xl sm:h-80 sm:w-80" />
           <div className="pointer-events-none absolute -left-24 top-40 h-56 w-56 rounded-full bg-[#C9A87C]/10 dark:bg-[#E8B4B8]/5 blur-3xl sm:h-72 sm:w-72" />
           <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full border border-[#C9A87C]/25 dark:border-[#C9A87C]/15 sm:h-64 sm:w-64" />
           <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full border border-[#C9A87C]/15 dark:border-[#C9A87C]/10 sm:h-40 sm:w-40" />
 
           <div className="relative z-10 mx-auto max-w-6xl">
-            {/* ================= TOP BAR ================= */}
-
+            {/* TOP BAR */}
             <div
               className="
                 mb-5 sm:mb-6
@@ -896,9 +973,7 @@ function Header() {
               "
               dir="rtl"
             >
-              {/* LEFT ACTIONS */}
               <div className="flex items-center gap-1.5 sm:gap-2">
-                {/* NOTIFICATION */}
                 <button
                   className="
                     relative flex h-9 w-9 sm:h-10 sm:w-10
@@ -916,7 +991,6 @@ function Header() {
                   <span className="absolute right-1.5 top-1.5 sm:right-2 sm:top-2 h-1.5 w-1.5 rounded-full bg-[#E8B4B8] ring-2 ring-[#FDF6F0] dark:ring-[#1F1F1F]" />
                 </button>
 
-                {/* FAVORITE */}
                 <button
                   className="
                     flex h-9 w-9 sm:h-10 sm:w-10
@@ -933,7 +1007,6 @@ function Header() {
                   <FaHeart className="text-[10px] sm:text-xs" />
                 </button>
 
-                {/* THEME TOGGLE */}
                 <button
                   onClick={toggleTheme}
                   aria-label="تغییر تم"
@@ -974,7 +1047,6 @@ function Header() {
                 </button>
               </div>
 
-              {/* BRAND */}
               <div className="text-center">
                 <p className="font-serif text-base sm:text-lg tracking-[0.12em] text-[#5D3A3A] dark:text-[#F4F0E8] transition-colors duration-500">
                   MAHOUR
@@ -984,13 +1056,12 @@ function Header() {
                 </p>
               </div>
 
-              {/* LOGO */}
               <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-[#C9A87C]/50 bg-white/60 dark:bg-white/5 text-[#C9A87C] shadow-sm transition-colors duration-500">
                 <span className="font-serif text-base sm:text-lg">M</span>
               </div>
             </div>
 
-            {/* ================= PROFILE ================= */}
+            {/* PROFILE */}
             <div
               className="
                 mb-5 sm:mb-7
@@ -1006,7 +1077,6 @@ function Header() {
               "
               dir="rtl"
             >
-              {/* AVATAR */}
               <div className="relative shrink-0">
                 <div className="rounded-[14px] sm:rounded-[18px] bg-gradient-to-br from-[#E8B4B8] to-[#C9A87C] p-[2px]">
                   <img
@@ -1018,7 +1088,6 @@ function Header() {
                 <span className="absolute -bottom-0.5 -left-0.5 sm:-bottom-1 sm:-left-1 h-3.5 w-3.5 sm:h-4 sm:w-4 rounded-full border-2 border-white dark:border-[#1F1F1F] bg-[#9DB89C]" />
               </div>
 
-              {/* PROFILE TEXT */}
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
                   <h2 className="text-sm sm:text-base md:text-lg font-bold text-[#5D3A3A] dark:text-[#F4F0E8] transition-colors duration-500">
@@ -1031,14 +1100,13 @@ function Header() {
                 </p>
               </div>
 
-              {/* PROFILE BUTTON */}
               <button className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-xl border border-[#C9A87C]/30 bg-white/50 dark:bg-white/5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-[11px] text-[#C9A87C] transition hover:bg-[#C9A87C]/10">
                 پروفایل
                 <FaChevronLeft className="text-[7px] sm:text-[8px]" />
               </button>
             </div>
 
-            {/* ================= HERO CONTENT ================= */}
+            {/* HERO CONTENT */}
             <div
               className="
                 grid gap-6 sm:gap-7
@@ -1047,7 +1115,6 @@ function Header() {
               "
               dir="rtl"
             >
-              {/* SEARCH + خدمات محبوب (بلافاصله بعد از سرچ) */}
               <div className="min-w-0">
                 <div className="mt-2 sm:mt-4 flex gap-2 sm:gap-2.5">
                   <div
@@ -1076,7 +1143,6 @@ function Header() {
                     />
                   </div>
 
-                  {/* FILTER BUTTON */}
                   <button
                     className="
                       flex h-[46px] w-[46px] sm:h-[52px] sm:w-[52px] lg:w-14 shrink-0
@@ -1094,19 +1160,15 @@ function Header() {
                   </button>
                 </div>
 
-                {/* ✨ خدمات محبوب — درست زیر سرچ باکس */}
                 <PopularServices />
               </div>
 
-              {/* ================= BEAUTY DASHBOARD ================= */}
               <BeautyDashboardCard />
             </div>
 
-            {/* ================= 💇‍♀️ اسلایدر آرایشگرها ================= */}
             <StylistsSlider />
           </div>
 
-          {/* ================= BOTTOM CURVE ================= */}
           <div className="absolute bottom-[-1px] left-[-2%] h-8 sm:h-10 md:h-12 w-[104%] rounded-[50%_50%_0_0] bg-[#FDF6F0] dark:bg-[#1A1A1A] transition-colors duration-500" />
         </div>
       </header>
@@ -1118,7 +1180,7 @@ function Header() {
 }
 
 /* ============================================================
-   ✨ BEAUTY DASHBOARD CARD — تب‌دار
+   ✨ BEAUTY DASHBOARD CARD
    ============================================================ */
 
 function BeautyDashboardCard() {
@@ -1139,7 +1201,6 @@ function BeautyDashboardCard() {
       "
       dir="rtl"
     >
-      {/* CARD HEADER */}
       <div className="flex items-center justify-between mb-3.5 sm:mb-4">
         <div>
           <p className="text-[8px] sm:text-[9px] tracking-[0.22em] text-[#C9A87C]">
@@ -1154,7 +1215,6 @@ function BeautyDashboardCard() {
         </div>
       </div>
 
-      {/* TABS */}
       <div className="flex gap-1 rounded-2xl bg-[#FDF6F0]/60 dark:bg-white/5 p-1">
         <DashboardTab
           active={activeTab === "today"}
@@ -1176,7 +1236,6 @@ function BeautyDashboardCard() {
         />
       </div>
 
-      {/* TAB CONTENT */}
       <div className="mt-3.5 sm:mt-4">
         {activeTab === "today" && <TodayTab hasNextBooking={hasNextBooking} />}
         {activeTab === "status" && <StatusTab />}
