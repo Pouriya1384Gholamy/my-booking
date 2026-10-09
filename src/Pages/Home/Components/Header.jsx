@@ -14,6 +14,10 @@ import {
   FaPaintBrush,
   FaCheckCircle,
   FaFire,
+  FaEye,
+  FaHandSparkles,
+  FaMagic,
+  FaCheck,
 } from "react-icons/fa";
 
 /* ============================================================
@@ -73,6 +77,275 @@ const NAV_ITEMS = [
     ),
   },
 ];
+
+/* ============================================================
+   💇‍♀️ داده‌های خدمات محبوب (نسخه جدید)
+   ============================================================ */
+
+const SERVICES = [
+  { id: 1, name: "ناخن", icon: <FaHandSparkles />, meta: "۱۸ متخصص", hot: true },
+  { id: 2, name: "کوتاهی مو", icon: <FaCut />, meta: "۱۲ متخصص" },
+  { id: 3, name: "ابرو و مژه", icon: <FaEye />, meta: "۹ متخصص" },
+  { id: 4, name: "میکاپ", icon: <FaPaintBrush />, meta: "۱۴ متخصص", hot: true },
+  { id: 5, name: "پوست", icon: <FaSpa />, meta: "۱۱ متخصص" },
+  { id: 6, name: "رنگ مو", icon: <FaMagic />, meta: "۱۰ متخصص" },
+];
+
+/* ============================================================
+   ✨ کارت قوسی (شکل آینه) — هر خدمت
+   ============================================================ */
+
+function ServiceArch({ service, selected, onSelect }) {
+  return (
+    <button
+      type="button"
+      onClick={() => onSelect(service.id)}
+      aria-pressed={selected}
+      className={`
+        group relative shrink-0 snap-start
+        h-[140px] w-[96px] sm:h-[156px] sm:w-[108px]
+        rounded-t-full rounded-b-[22px]
+        border outline-none
+        transition-all duration-500
+        ease-[cubic-bezier(0.175,0.885,0.32,1.275)]
+        motion-reduce:transition-none
+        focus-visible:ring-4 focus-visible:ring-[#E8B4B8]/40
+        ${
+          selected
+            ? "-translate-y-1.5 border-[#C9A87C] bg-gradient-to-b from-[#C9A87C] to-[#B8956A] shadow-[0_14px_30px_rgba(201,168,124,0.45)] dark:shadow-[0_14px_30px_rgba(201,168,124,0.25)]"
+            : `
+              border-[#C9A87C]/25 dark:border-white/10
+              bg-gradient-to-b from-white to-[#FAEDE6]
+              dark:from-[#2E2E2E] dark:to-[#242424]
+              shadow-[0_8px_20px_rgba(201,168,124,0.12)]
+              dark:shadow-[0_8px_20px_rgba(0,0,0,0.35)]
+              hover:-translate-y-1 hover:border-[#C9A87C]/60
+            `
+        }
+      `}
+    >
+      {/* قاب داخلی (حس قاب آینه) */}
+      <span
+        aria-hidden="true"
+        className={`
+          pointer-events-none absolute inset-1.5
+          rounded-t-full rounded-b-[16px]
+          border transition-colors duration-500
+          ${
+            selected
+              ? "border-white/40"
+              : "border-[#C9A87C]/20 dark:border-white/[0.07] group-hover:border-[#C9A87C]/40"
+          }
+        `}
+      />
+
+      {/* نشان داغ بودن — روی رأس قوس */}
+      {service.hot && !selected && (
+        <span
+          aria-label="پرطرفدار"
+          className="
+            absolute -top-1.5 left-1/2 -translate-x-1/2
+            flex h-5 w-5 items-center justify-center
+            rounded-full
+            bg-gradient-to-br from-[#E8B4B8] to-[#C9A87C]
+            text-white shadow-md
+            ring-2 ring-[#FDF6F0] dark:ring-[#1F1F1F]
+          "
+        >
+          <FaFire className="text-[8px]" />
+        </span>
+      )}
+
+      {/* نشان انتخاب‌شده */}
+      {selected && (
+        <span
+          className="
+            absolute -top-1.5 left-1/2 -translate-x-1/2
+            flex h-5 w-5 items-center justify-center
+            rounded-full bg-white text-[#B8956A] shadow-md
+            ring-2 ring-[#FDF6F0] dark:ring-[#1F1F1F]
+          "
+        >
+          <FaCheck className="text-[8px]" />
+        </span>
+      )}
+
+      <span className="relative z-10 flex h-full flex-col items-center justify-end gap-1 pb-3.5 sm:pb-4">
+        {/* مدالیون آیکون */}
+        <span
+          className={`
+            mb-1.5 flex h-12 w-12 sm:h-14 sm:w-14
+            items-center justify-center rounded-full
+            text-lg sm:text-xl
+            transition-all duration-500
+            ${
+              selected
+                ? "bg-white/20 text-white"
+                : "bg-[#C9A87C]/10 dark:bg-[#C9A87C]/15 text-[#C9A87C] group-hover:bg-[#C9A87C]/20 group-hover:scale-110"
+            }
+          `}
+        >
+          {service.icon}
+        </span>
+
+        <span
+          className={`
+            text-[11px] sm:text-xs font-bold leading-none transition-colors duration-500
+            ${selected ? "text-white" : "text-[#5D3A3A] dark:text-[#F4F0E8]"}
+          `}
+        >
+          {service.name}
+        </span>
+
+        <span
+          className={`
+            text-[8px] sm:text-[9px] leading-none transition-colors duration-500
+            ${selected ? "text-white/80" : "text-[#8B6F6F] dark:text-white/40"}
+          `}
+        >
+          {service.meta}
+        </span>
+      </span>
+    </button>
+  );
+}
+
+/* ============================================================
+   🌟 بخش خدمات محبوب (کامپوننت جدید)
+   ============================================================ */
+
+function PopularServices() {
+  const [selectedId, setSelectedId] = useState(null);
+  const selected = SERVICES.find((s) => s.id === selectedId);
+
+  const handleSelect = (id) =>
+    setSelectedId((prev) => (prev === id ? null : id));
+
+  return (
+    <section
+      className="mt-8 sm:mt-10"
+      dir="rtl"
+      aria-labelledby="popular-services-title"
+    >
+      {/* ---------- هدر بخش ---------- */}
+      <div className="mb-4 sm:mb-5 flex items-end justify-between">
+        <div className="flex items-center gap-2.5">
+          <span
+            aria-hidden="true"
+            className="h-9 w-[3px] rounded-full bg-gradient-to-b from-[#C9A87C] to-[#E8B4B8]"
+          />
+          <div>
+            <p className="text-[8px] sm:text-[9px] tracking-[0.22em] text-[#C9A87C]">
+              POPULAR SERVICES
+            </p>
+            <h3
+              id="popular-services-title"
+              className="mt-1 text-sm sm:text-base font-bold text-[#5D3A3A] dark:text-[#F4F0E8] transition-colors duration-500"
+            >
+              خدمات محبوب
+            </h3>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          className="
+            group flex items-center gap-1
+            rounded-full
+            border border-[#C9A87C]/30 dark:border-white/10
+            bg-white/60 dark:bg-white/5
+            px-3 py-1.5
+            text-[10px] sm:text-xs
+            text-[#8B6F6F] dark:text-white/50
+            transition
+            hover:border-[#C9A87C] hover:text-[#C9A87C] dark:hover:text-[#C9A87C]
+          "
+        >
+          مشاهده همه
+          <FaChevronLeft className="text-[7px] transition-transform group-hover:-translate-x-0.5" />
+        </button>
+      </div>
+
+      {/* ---------- لیست افقی با اسنپ و محو شدن لبه‌ها ---------- */}
+      <div
+        className="
+          -mx-4 sm:-mx-6 md:mx-0
+          [mask-image:linear-gradient(to_left,transparent,black_20px,black_calc(100%-20px),transparent)]
+        "
+      >
+        <div
+          className="
+            flex snap-x snap-mandatory gap-3 sm:gap-4
+            overflow-x-auto
+            px-4 sm:px-6 md:px-1
+            pb-5 pt-3
+            [scrollbar-width:none] [&::-webkit-scrollbar]:hidden
+          "
+        >
+          {SERVICES.map((service) => (
+            <ServiceArch
+              key={service.id}
+              service={service}
+              selected={selectedId === service.id}
+              onSelect={handleSelect}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* ---------- نوار رزرو سریع — بعد از انتخاب ---------- */}
+      {selected && (
+        <div
+          key={selected.id}
+          className="
+            animate-slideIn
+            mt-1 flex items-center justify-between gap-3
+            rounded-2xl
+            border border-[#C9A87C]/30 dark:border-white/10
+            bg-white/80 dark:bg-[#2A2A2A]/80
+            p-2.5 sm:p-3
+            shadow-[0_10px_30px_rgba(201,168,124,0.15)]
+            dark:shadow-[0_10px_30px_rgba(0,0,0,0.35)]
+            backdrop-blur-md
+          "
+          role="status"
+        >
+          <div className="flex min-w-0 items-center gap-2.5">
+            <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#C9A87C]/10 dark:bg-[#C9A87C]/15 text-sm text-[#C9A87C]">
+              {selected.icon}
+            </span>
+            <div className="min-w-0">
+              <p className="text-[9px] text-[#8B6F6F] dark:text-white/40">
+                خدمت انتخابی
+              </p>
+              <p className="truncate text-xs font-bold text-[#5D3A3A] dark:text-[#F4F0E8]">
+                {selected.name}
+              </p>
+            </div>
+          </div>
+
+          <button
+            type="button"
+            className="
+              flex shrink-0 items-center gap-1.5
+              rounded-xl
+              bg-gradient-to-br from-[#C9A87C] to-[#B8956A]
+              px-3.5 py-2
+              text-[11px] font-medium text-white
+              shadow-[0_8px_20px_rgba(201,168,124,0.3)]
+              transition
+              hover:-translate-y-0.5
+              active:scale-[0.97]
+            "
+          >
+            رزرو نوبت
+            <FaChevronLeft className="text-[8px]" />
+          </button>
+        </div>
+      )}
+    </section>
+  );
+}
 
 /* ============================================================
    🧭 کامپوننت Navigation — با Portal مستقیم توی <body>
@@ -194,7 +467,6 @@ function Navigation() {
     </nav>
   );
 
-  /* ✅ رندر مستقیم توی <body> با Portal */
   if (!mounted) return null;
   return createPortal(navContent, document.body);
 }
@@ -254,55 +526,10 @@ function Header() {
         >
           {/* ================= BACKGROUND DECORATIONS ================= */}
 
-          <div
-            className="
-              pointer-events-none
-              absolute -right-28 -top-28
-              h-64 w-64
-              rounded-full
-              bg-[#E8B4B8]/20
-              dark:bg-[#C9A87C]/10
-              blur-3xl
-              sm:h-80 sm:w-80
-            "
-          />
-
-          <div
-            className="
-              pointer-events-none
-              absolute -left-24 top-40
-              h-56 w-56
-              rounded-full
-              bg-[#C9A87C]/10
-              dark:bg-[#E8B4B8]/5
-              blur-3xl
-              sm:h-72 sm:w-72
-            "
-          />
-
-          <div
-            className="
-              pointer-events-none
-              absolute -right-16 -top-16
-              h-48 w-48
-              rounded-full
-              border border-[#C9A87C]/25
-              dark:border-[#C9A87C]/15
-              sm:h-64 sm:w-64
-            "
-          />
-
-          <div
-            className="
-              pointer-events-none
-              absolute -right-6 -top-6
-              h-28 w-28
-              rounded-full
-              border border-[#C9A87C]/15
-              dark:border-[#C9A87C]/10
-              sm:h-40 sm:w-40
-            "
-          />
+          <div className="pointer-events-none absolute -right-28 -top-28 h-64 w-64 rounded-full bg-[#E8B4B8]/20 dark:bg-[#C9A87C]/10 blur-3xl sm:h-80 sm:w-80" />
+          <div className="pointer-events-none absolute -left-24 top-40 h-56 w-56 rounded-full bg-[#C9A87C]/10 dark:bg-[#E8B4B8]/5 blur-3xl sm:h-72 sm:w-72" />
+          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full border border-[#C9A87C]/25 dark:border-[#C9A87C]/15 sm:h-64 sm:w-64" />
+          <div className="pointer-events-none absolute -right-6 -top-6 h-28 w-28 rounded-full border border-[#C9A87C]/15 dark:border-[#C9A87C]/10 sm:h-40 sm:w-40" />
 
           <div className="relative z-10 mx-auto max-w-6xl">
             {/* ================= TOP BAR ================= */}
@@ -311,75 +538,42 @@ function Header() {
               className="
                 mb-5 sm:mb-6
                 flex items-center justify-between
-                border-b
-                border-[#5D3A3A]/8
-                dark:border-white/10
+                border-b border-[#5D3A3A]/8 dark:border-white/10
                 pb-4 sm:pb-5
                 transition-colors duration-500
               "
               dir="rtl"
             >
               {/* LEFT ACTIONS */}
-
               <div className="flex items-center gap-1.5 sm:gap-2">
                 {/* NOTIFICATION */}
-
                 <button
                   className="
-                    relative
-                    flex h-9 w-9 sm:h-10 sm:w-10
-                    items-center justify-center
-                    rounded-full
-                    border border-[#5D3A3A]/10
-                    dark:border-white/10
-                    bg-white/70
-                    dark:bg-white/5
-                    text-[#5D3A3A]
-                    dark:text-[#F4F0E8]
-                    shadow-sm
-                    transition
-                    hover:border-[#C9A87C]/50
-                    hover:text-[#C9A87C]
-                    hover:shadow-md
+                    relative flex h-9 w-9 sm:h-10 sm:w-10
+                    items-center justify-center rounded-full
+                    border border-[#5D3A3A]/10 dark:border-white/10
+                    bg-white/70 dark:bg-white/5
+                    text-[#5D3A3A] dark:text-[#F4F0E8]
+                    shadow-sm transition
+                    hover:border-[#C9A87C]/50 hover:text-[#C9A87C] hover:shadow-md
                     active:scale-95
                   "
                   aria-label="اعلان‌ها"
                 >
                   <FaBell className="text-[10px] sm:text-xs" />
-
-                  <span
-                    className="
-                      absolute
-                      right-1.5 top-1.5
-                      sm:right-2 sm:top-2
-                      h-1.5 w-1.5
-                      rounded-full
-                      bg-[#E8B4B8]
-                      ring-2
-                      ring-[#FDF6F0]
-                      dark:ring-[#1F1F1F]
-                    "
-                  />
+                  <span className="absolute right-1.5 top-1.5 sm:right-2 sm:top-2 h-1.5 w-1.5 rounded-full bg-[#E8B4B8] ring-2 ring-[#FDF6F0] dark:ring-[#1F1F1F]" />
                 </button>
 
                 {/* FAVORITE */}
-
                 <button
                   className="
                     flex h-9 w-9 sm:h-10 sm:w-10
-                    items-center justify-center
-                    rounded-full
-                    border border-[#5D3A3A]/10
-                    dark:border-white/10
-                    bg-white/70
-                    dark:bg-white/5
-                    text-[#5D3A3A]
-                    dark:text-[#F4F0E8]
-                    shadow-sm
-                    transition
-                    hover:border-[#E8B4B8]/50
-                    hover:text-[#E8B4B8]
-                    hover:shadow-md
+                    items-center justify-center rounded-full
+                    border border-[#5D3A3A]/10 dark:border-white/10
+                    bg-white/70 dark:bg-white/5
+                    text-[#5D3A3A] dark:text-[#F4F0E8]
+                    shadow-sm transition
+                    hover:border-[#E8B4B8]/50 hover:text-[#E8B4B8] hover:shadow-md
                     active:scale-95
                   "
                   aria-label="علاقه‌مندی‌ها"
@@ -388,36 +582,24 @@ function Header() {
                 </button>
 
                 {/* THEME TOGGLE */}
-
                 <button
                   onClick={toggleTheme}
                   aria-label="تغییر تم"
                   className="
-                    relative
-                    flex h-9 w-9 sm:h-10 sm:w-10
-                    items-center justify-center
-                    overflow-hidden
-                    rounded-full
-                    border border-[#C9A87C]/30
-                    dark:border-[#C9A87C]/40
-                    bg-gradient-to-br
-                    from-[#FDF6F0]
-                    to-[#F5DCD5]
-                    dark:from-[#2A2A2A]
-                    dark:to-[#1F1F1F]
-                    text-[#C9A87C]
-                    shadow-sm
+                    relative flex h-9 w-9 sm:h-10 sm:w-10
+                    items-center justify-center overflow-hidden rounded-full
+                    border border-[#C9A87C]/30 dark:border-[#C9A87C]/40
+                    bg-gradient-to-br from-[#FDF6F0] to-[#F5DCD5]
+                    dark:from-[#2A2A2A] dark:to-[#1F1F1F]
+                    text-[#C9A87C] shadow-sm
                     transition-all duration-500
-                    hover:border-[#C9A87C]/70
-                    hover:shadow-md
+                    hover:border-[#C9A87C]/70 hover:shadow-md
                     active:scale-95
                   "
                 >
                   <FaSun
                     className={`
-                      absolute
-                      text-xs sm:text-sm
-                      text-[#C9A87C]
+                      absolute text-xs sm:text-sm text-[#C9A87C]
                       transition-all duration-500
                       ${
                         darkMode
@@ -426,12 +608,9 @@ function Header() {
                       }
                     `}
                   />
-
                   <FaMoon
                     className={`
-                      absolute
-                      text-xs sm:text-sm
-                      text-[#E8B4B8]
+                      absolute text-xs sm:text-sm text-[#E8B4B8]
                       transition-all duration-500
                       ${
                         darkMode
@@ -444,65 +623,29 @@ function Header() {
               </div>
 
               {/* BRAND */}
-
               <div className="text-center">
-                <p
-                  className="
-                    font-serif
-                    text-base sm:text-lg
-                    tracking-[0.12em]
-                    text-[#5D3A3A]
-                    dark:text-[#F4F0E8]
-                    transition-colors duration-500
-                  "
-                >
+                <p className="font-serif text-base sm:text-lg tracking-[0.12em] text-[#5D3A3A] dark:text-[#F4F0E8] transition-colors duration-500">
                   MAHOUR
                 </p>
-
-                <p
-                  className="
-                    mt-0.5
-                    text-[7px] sm:text-[8px]
-                    tracking-[0.35em]
-                    text-[#C9A87C]
-                  "
-                >
+                <p className="mt-0.5 text-[7px] sm:text-[8px] tracking-[0.35em] text-[#C9A87C]">
                   BEAUTY STUDIO
                 </p>
               </div>
 
               {/* LOGO */}
-
-              <div
-                className="
-                  flex h-9 w-9 sm:h-10 sm:w-10
-                  items-center justify-center
-                  rounded-full
-                  border border-[#C9A87C]/50
-                  bg-white/60
-                  dark:bg-white/5
-                  text-[#C9A87C]
-                  shadow-sm
-                  transition-colors duration-500
-                "
-              >
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-full border border-[#C9A87C]/50 bg-white/60 dark:bg-white/5 text-[#C9A87C] shadow-sm transition-colors duration-500">
                 <span className="font-serif text-base sm:text-lg">M</span>
               </div>
             </div>
 
             {/* ================= PROFILE ================= */}
-
             <div
               className="
                 mb-5 sm:mb-7
-                flex items-center
-                gap-2.5 sm:gap-3
-                rounded-[20px]
-                sm:rounded-[24px]
-                border border-white/60
-                dark:border-white/10
-                bg-white/70
-                dark:bg-white/5
+                flex items-center gap-2.5 sm:gap-3
+                rounded-[20px] sm:rounded-[24px]
+                border border-white/60 dark:border-white/10
+                bg-white/70 dark:bg-white/5
                 p-2.5 sm:p-3
                 shadow-[0_8px_30px_rgba(201,168,124,0.12)]
                 dark:shadow-[0_8px_30px_rgba(0,0,0,0.3)]
@@ -512,193 +655,84 @@ function Header() {
               dir="rtl"
             >
               {/* AVATAR */}
-
               <div className="relative shrink-0">
-                <div
-                  className="
-                    rounded-[14px]
-                    sm:rounded-[18px]
-                    bg-gradient-to-br
-                    from-[#E8B4B8]
-                    to-[#C9A87C]
-                    p-[2px]
-                  "
-                >
+                <div className="rounded-[14px] sm:rounded-[18px] bg-gradient-to-br from-[#E8B4B8] to-[#C9A87C] p-[2px]">
                   <img
                     src="https://i.pravatar.cc/150?img=1"
                     alt="آواتار"
-                    className="
-                      h-11 w-11
-                      sm:h-14 sm:w-14
-                      md:h-16 md:w-16
-                      rounded-[12px]
-                      sm:rounded-[16px]
-                      object-cover
-                    "
+                    className="h-11 w-11 sm:h-14 sm:w-14 md:h-16 md:w-16 rounded-[12px] sm:rounded-[16px] object-cover"
                   />
                 </div>
-
-                <span
-                  className="
-                    absolute
-                    -bottom-0.5 -left-0.5
-                    sm:-bottom-1 sm:-left-1
-                    h-3.5 w-3.5
-                    sm:h-4 sm:w-4
-                    rounded-full
-                    border-2
-                    border-white
-                    dark:border-[#1F1F1F]
-                    bg-[#9DB89C]
-                  "
-                />
+                <span className="absolute -bottom-0.5 -left-0.5 sm:-bottom-1 sm:-left-1 h-3.5 w-3.5 sm:h-4 sm:w-4 rounded-full border-2 border-white dark:border-[#1F1F1F] bg-[#9DB89C]" />
               </div>
 
               {/* PROFILE TEXT */}
-
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <h2
-                    className="
-                      text-sm sm:text-base md:text-lg
-                      font-bold
-                      text-[#5D3A3A]
-                      dark:text-[#F4F0E8]
-                      transition-colors duration-500
-                    "
-                  >
+                  <h2 className="text-sm sm:text-base md:text-lg font-bold text-[#5D3A3A] dark:text-[#F4F0E8] transition-colors duration-500">
                     سلام، مریم
                   </h2>
-
                   <FaHeart className="text-[10px] sm:text-xs text-[#E8B4B8]" />
                 </div>
-
-                <p
-                  className="
-                    mt-0.5 sm:mt-1
-                    truncate
-                    text-[10px] sm:text-xs md:text-sm
-                    text-[#8B6F6F]
-                    dark:text-white/50
-                    transition-colors duration-500
-                  "
-                >
+                <p className="mt-0.5 sm:mt-1 truncate text-[10px] sm:text-xs md:text-sm text-[#8B6F6F] dark:text-white/50 transition-colors duration-500">
                   برای یک تجربه زیبایی جدید آماده‌ای؟
                 </p>
               </div>
 
               {/* PROFILE BUTTON */}
-
-              <button
-                className="
-                  hidden sm:flex
-                  shrink-0
-                  items-center
-                  gap-1.5
-                  rounded-xl
-                  border border-[#C9A87C]/30
-                  bg-white/50
-                  dark:bg-white/5
-                  px-2.5 sm:px-3
-                  py-1.5 sm:py-2
-                  text-[10px] sm:text-[11px]
-                  text-[#C9A87C]
-                  transition
-                  hover:bg-[#C9A87C]/10
-                "
-              >
+              <button className="hidden sm:flex shrink-0 items-center gap-1.5 rounded-xl border border-[#C9A87C]/30 bg-white/50 dark:bg-white/5 px-2.5 sm:px-3 py-1.5 sm:py-2 text-[10px] sm:text-[11px] text-[#C9A87C] transition hover:bg-[#C9A87C]/10">
                 پروفایل
                 <FaChevronLeft className="text-[7px] sm:text-[8px]" />
               </button>
             </div>
 
             {/* ================= HERO CONTENT ================= */}
-
             <div
               className="
-                grid
-                gap-6 sm:gap-7
-                md:grid-cols-[1fr_290px]
-                md:items-center
-                md:gap-8
+                grid gap-6 sm:gap-7
+                md:grid-cols-[1fr_290px] md:items-center md:gap-8
                 lg:grid-cols-[1fr_340px]
               "
               dir="rtl"
             >
               {/* TEXT + SEARCH */}
-
               <div>
-                {/* SEARCH */}
-
                 <div className="mt-2 sm:mt-4 flex gap-2 sm:gap-2.5">
                   <div
                     className="
-                      group
-                      flex min-h-[46px]
-                      sm:min-h-[52px]
-                      flex-1
-                      items-center
-                      gap-2 sm:gap-3
-                      rounded-2xl
-                      border border-[#5D3A3A]/8
-                      dark:border-white/10
-                      bg-white
-                      dark:bg-[#2A2A2A]
+                      group flex min-h-[46px] sm:min-h-[52px] flex-1
+                      items-center gap-2 sm:gap-3
+                      rounded-2xl border border-[#5D3A3A]/8 dark:border-white/10
+                      bg-white dark:bg-[#2A2A2A]
                       px-3 sm:px-4
                       shadow-[0_10px_30px_rgba(201,168,124,0.15)]
                       dark:shadow-[0_10px_30px_rgba(0,0,0,0.3)]
                       transition-colors duration-500
-                      focus-within:ring-4
-                      focus-within:ring-[#E8B4B8]/20
+                      focus-within:ring-4 focus-within:ring-[#E8B4B8]/20
                     "
                   >
-                    <FaSearch
-                      className="
-                        shrink-0
-                        text-xs sm:text-sm
-                        text-[#C9A87C]
-                        transition
-                        group-focus-within:scale-110
-                      "
-                    />
-
+                    <FaSearch className="shrink-0 text-xs sm:text-sm text-[#C9A87C] transition group-focus-within:scale-110" />
                     <input
                       type="text"
                       placeholder="جستجو در خدمات سالن..."
                       className="
-                        min-w-0
-                        flex-1
-                        bg-transparent
-                        text-right
-                        text-xs sm:text-sm
-                        text-[#5D3A3A]
-                        dark:text-[#F4F0E8]
-                        outline-none
-                        placeholder:text-[#B8A8A8]
-                        dark:placeholder:text-white/30
+                        min-w-0 flex-1 bg-transparent text-right
+                        text-xs sm:text-sm text-[#5D3A3A] dark:text-[#F4F0E8]
+                        outline-none placeholder:text-[#B8A8A8] dark:placeholder:text-white/30
                         transition-colors duration-500
                       "
                     />
                   </div>
 
                   {/* FILTER BUTTON */}
-
                   <button
                     className="
-                      flex
-                      h-[46px] w-[46px]
-                      sm:h-[52px] sm:w-[52px]
-                      lg:w-14
-                      shrink-0
-                      items-center justify-center
-                      rounded-2xl
-                      bg-gradient-to-br
-                      from-[#C9A87C]
-                      to-[#B8956A]
+                      flex h-[46px] w-[46px] sm:h-[52px] sm:w-[52px] lg:w-14 shrink-0
+                      items-center justify-center rounded-2xl
+                      bg-gradient-to-br from-[#C9A87C] to-[#B8956A]
                       text-white
                       shadow-[0_10px_25px_rgba(201,168,124,0.4)]
-                      transition
-                      hover:-translate-y-0.5
+                      transition hover:-translate-y-0.5
                       hover:shadow-[0_14px_30px_rgba(201,168,124,0.5)]
                       active:scale-95
                     "
@@ -710,35 +744,20 @@ function Header() {
               </div>
 
               {/* ================= BEAUTY DASHBOARD ================= */}
-
               <BeautyDashboardCard />
             </div>
+
+            {/* ================= ✨ بخش جدید: خدمات محبوب ================= */}
+            <PopularServices />
+            {/* ================= پایان بخش خدمات محبوب ================= */}
           </div>
 
           {/* ================= BOTTOM CURVE ================= */}
-
-          <div
-            className="
-              absolute
-              bottom-[-1px]
-              left-[-2%]
-              h-8 sm:h-10 md:h-12
-              w-[104%]
-              rounded-[50%_50%_0_0]
-              bg-[#FDF6F0]
-              dark:bg-[#1A1A1A]
-              transition-colors duration-500
-            "
-          />
+          <div className="absolute bottom-[-1px] left-[-2%] h-8 sm:h-10 md:h-12 w-[104%] rounded-[50%_50%_0_0] bg-[#FDF6F0] dark:bg-[#1A1A1A] transition-colors duration-500" />
         </div>
       </header>
 
-      {/* ==================================================
-          ✅ Navigation — با Portal مستقیم توی <body>
-         ================================================== */}
       <Navigation />
-
-      {/* 👇 فضای خالی زیر محتوا، چون نوار fixed روی محتوا شناوره */}
       <div className="h-28" aria-hidden="true" />
     </>
   );
@@ -750,23 +769,15 @@ function Header() {
 
 function BeautyDashboardCard() {
   const hasNextBooking = false;
-
   const [activeTab, setActiveTab] = useState("today");
 
   return (
     <div
       className="
-        w-full
-        rounded-[20px]
-        sm:rounded-[24px]
-        md:rounded-[30px]
-        border border-white/60
-        dark:border-white/10
-        bg-white/80
-        dark:bg-[#2A2A2A]/80
-        p-3.5
-        sm:p-4
-        md:p-5
+        w-full rounded-[20px] sm:rounded-[24px] md:rounded-[30px]
+        border border-white/60 dark:border-white/10
+        bg-white/80 dark:bg-[#2A2A2A]/80
+        p-3.5 sm:p-4 md:p-5
         shadow-[0_20px_50px_rgba(201,168,124,0.18)]
         dark:shadow-[0_20px_50px_rgba(0,0,0,0.4)]
         backdrop-blur-md
@@ -784,16 +795,7 @@ function BeautyDashboardCard() {
             فضای زیبایی تو
           </h3>
         </div>
-
-        <div
-          className="
-            flex h-8 w-8 sm:h-9 sm:w-9
-            items-center justify-center
-            rounded-xl
-            bg-[#C9A87C]/10
-            text-[#C9A87C]
-          "
-        >
+        <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-xl bg-[#C9A87C]/10 text-[#C9A87C]">
           <FaHeart className="text-[10px] sm:text-xs" />
         </div>
       </div>
@@ -883,27 +885,12 @@ function TodayTab({ hasNextBooking }) {
         <DashboardStat value="۸" label="خدمت ویژه" />
       </div>
 
-      <div
-        className="
-          mt-3 rounded-2xl
-          bg-gradient-to-br
-          from-[#FDF6F0] to-[#F5DCD5]
-          dark:from-white/5 dark:to-white/[0.02]
-          p-3 sm:p-3.5
-        "
-      >
+      <div className="mt-3 rounded-2xl bg-gradient-to-br from-[#FDF6F0] to-[#F5DCD5] dark:from-white/5 dark:to-white/[0.02] p-3 sm:p-3.5">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <div
-              className="
-                flex h-8.5 w-8.5 sm:h-10 sm:w-10 shrink-0
-                items-center justify-center rounded-xl
-                bg-white/80 dark:bg-white/10 text-[#C9A87C]
-              "
-            >
+            <div className="flex h-8.5 w-8.5 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-xl bg-white/80 dark:bg-white/10 text-[#C9A87C]">
               <FaClock className="text-xs sm:text-sm" />
             </div>
-
             <div>
               <p className="text-[8px] sm:text-[9px] text-[#8B6F6F] dark:text-white/40">
                 {hasNextBooking ? "رزرو بعدی شما" : "رزرو بعدی"}
@@ -913,14 +900,7 @@ function TodayTab({ hasNextBooking }) {
               </h4>
             </div>
           </div>
-
-          <span
-            className="
-              rounded-full bg-[#9DB89C]/15
-              px-2 py-1 text-[7px] sm:text-[8px]
-              font-medium text-[#6B8A6A]
-            "
-          >
+          <span className="rounded-full bg-[#9DB89C]/15 px-2 py-1 text-[7px] sm:text-[8px] font-medium text-[#6B8A6A]">
             {hasNextBooking ? "تأیید شده" : "آماده‌ای؟"}
           </span>
         </div>
@@ -928,20 +908,12 @@ function TodayTab({ hasNextBooking }) {
         {hasNextBooking ? (
           <div className="mt-3 grid grid-cols-2 gap-2">
             <div className="rounded-xl bg-white/60 dark:bg-white/5 px-2.5 py-2">
-              <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">
-                تاریخ
-              </p>
-              <p className="mt-0.5 text-[9px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">
-                شنبه، ۲۵ مهر
-              </p>
+              <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">تاریخ</p>
+              <p className="mt-0.5 text-[9px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">شنبه، ۲۵ مهر</p>
             </div>
             <div className="rounded-xl bg-white/60 dark:bg-white/5 px-2.5 py-2">
-              <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">
-                ساعت
-              </p>
-              <p className="mt-0.5 text-[9px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">
-                ۱۸:۳۰
-              </p>
+              <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">ساعت</p>
+              <p className="mt-0.5 text-[9px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">۱۸:۳۰</p>
             </div>
           </div>
         ) : (
@@ -949,20 +921,7 @@ function TodayTab({ hasNextBooking }) {
             <p className="text-[8px] sm:text-[9px] leading-4 text-[#8B6F6F] dark:text-white/40">
               وقتشه یه تجربه جدید برای خودت انتخاب کنی ✨
             </p>
-            <button
-              className="
-                mt-2.5 flex w-full items-center justify-between
-                rounded-xl
-                bg-gradient-to-br from-[#C9A87C] to-[#B8956A]
-                px-3 py-2.5
-                text-[10px] sm:text-[18px] font-medium text-white
-                shadow-[0_8px_20px_rgba(201,168,124,0.25)]
-                transition
-                hover:-translate-y-0.5
-                hover:shadow-[0_12px_25px_rgba(201,168,124,0.4)]
-                active:scale-[0.98]
-              "
-            >
+            <button className="mt-2.5 flex w-full items-center justify-between rounded-xl bg-gradient-to-br from-[#C9A87C] to-[#B8956A] px-3 py-2.5 text-[10px] sm:text-[18px] font-medium text-white shadow-[0_8px_20px_rgba(201,168,124,0.25)] transition hover:-translate-y-0.5 hover:shadow-[0_12px_25px_rgba(201,168,124,0.4)] active:scale-[0.98]">
               <span>رزرو نوبت</span>
               <FaChevronLeft className="text-[8px]" />
             </button>
@@ -989,25 +948,11 @@ function StatusTab() {
             وضعیت زیبایی تو
           </h4>
         </div>
-        <span className="text-[9px] font-bold text-[#6B8A6A]">عالی </span>
+        <span className="text-[9px] font-bold text-[#6B8A6A]">عالی</span>
       </div>
 
-      <div
-        className="
-          mt-3 flex items-center gap-3
-          rounded-2xl
-          border border-[#9DB89C]/20
-          bg-gradient-to-br from-[#9DB89C]/10 to-[#9DB89C]/5
-          p-3
-        "
-      >
-        <div
-          className="
-            flex h-10 w-10 shrink-0
-            items-center justify-center rounded-xl
-            bg-[#9DB89C]/20 text-[#6B8A6A]
-          "
-        >
+      <div className="mt-3 flex items-center gap-3 rounded-2xl border border-[#9DB89C]/20 bg-gradient-to-br from-[#9DB89C]/10 to-[#9DB89C]/5 p-3">
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#9DB89C]/20 text-[#6B8A6A]">
           <FaCheckCircle className="text-sm" />
         </div>
         <div className="min-w-0 flex-1">
@@ -1022,20 +967,12 @@ function StatusTab() {
 
       <div className="mt-2.5 grid grid-cols-2 gap-2">
         <div className="rounded-xl bg-[#FDF6F0] dark:bg-white/5 px-2.5 py-2">
-          <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">
-            آخرین بازدید
-          </p>
-          <p className="mt-0.5 text-[9px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">
-            ۱۲ روز پیش
-          </p>
+          <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">آخرین بازدید</p>
+          <p className="mt-0.5 text-[9px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">۱۲ روز پیش</p>
         </div>
         <div className="rounded-xl bg-[#FDF6F0] dark:bg-white/5 px-2.5 py-2">
-          <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">
-            پیشنهاد امروز
-          </p>
-          <p className="mt-0.5 text-[9px] font-medium text-[#C9A87C]">
-            فیشیال + آبرسانی
-          </p>
+          <p className="text-[7px] text-[#8B6F6F] dark:text-white/40">پیشنهاد امروز</p>
+          <p className="mt-0.5 text-[9px] font-medium text-[#C9A87C]">فیشیال + آبرسانی</p>
         </div>
       </div>
 
@@ -1044,9 +981,7 @@ function StatusTab() {
           <span className="text-[8px] sm:text-[9px] text-[#8B6F6F] dark:text-white/40">
             پیشرفت برنامه‌ی ماهانه
           </span>
-          <span className="text-[8px] sm:text-[9px] font-bold text-[#C9A87C]">
-            ۷۵٪
-          </span>
+          <span className="text-[8px] sm:text-[9px] font-bold text-[#C9A87C]">۷۵٪</span>
         </div>
         <div className="mt-1.5 h-1.5 w-full overflow-hidden rounded-full bg-[#FDF6F0] dark:bg-white/5">
           <div
@@ -1108,35 +1043,11 @@ function TrendingTab() {
 
 function DashboardStat({ value, label }) {
   return (
-    <div
-      className="
-        flex flex-col items-center
-        rounded-xl
-        bg-[#FDF6F0]
-        dark:bg-white/5
-        py-2
-      "
-    >
-      <span
-        className="
-          font-serif
-          text-xs sm:text-sm
-          font-bold
-          text-[#5D3A3A]
-          dark:text-[#F4F0E8]
-        "
-      >
+    <div className="flex flex-col items-center rounded-xl bg-[#FDF6F0] dark:bg-white/5 py-2">
+      <span className="font-serif text-xs sm:text-sm font-bold text-[#5D3A3A] dark:text-[#F4F0E8]">
         {value}
       </span>
-
-      <span
-        className="
-          mt-0.5
-          text-[7px] sm:text-[8px]
-          text-[#8B6F6F]
-          dark:text-white/40
-        "
-      >
+      <span className="mt-0.5 text-[7px] sm:text-[8px] text-[#8B6F6F] dark:text-white/40">
         {label}
       </span>
     </div>
@@ -1155,61 +1066,24 @@ function TrendingService({ icon, title, bookings, rank }) {
   };
 
   return (
-    <div
-      className="
-        flex items-center gap-2.5
-        rounded-xl
-        bg-[#FDF6F0]/70
-        dark:bg-white/5
-        px-2.5 py-2
-        transition
-        hover:bg-[#C9A87C]/10
-        hover:translate-x-[-2px]
-      "
-    >
-      <div
-        className="
-          flex h-8 w-8 shrink-0
-          items-center justify-center
-          rounded-lg
-          bg-white dark:bg-white/10
-          text-[#C9A87C] shadow-sm
-        "
-      >
+    <div className="flex items-center gap-2.5 rounded-xl bg-[#FDF6F0]/70 dark:bg-white/5 px-2.5 py-2 transition hover:bg-[#C9A87C]/10 hover:translate-x-[-2px]">
+      <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white dark:bg-white/10 text-[#C9A87C] shadow-sm">
         <span className="text-[10px]">{icon}</span>
       </div>
 
       <div className="min-w-0 flex-1">
-        <p
-          className="
-            truncate
-            text-[9px] sm:text-[10px]
-            font-medium
-            text-[#5D3A3A]
-            dark:text-[#F4F0E8]
-          "
-        >
+        <p className="truncate text-[9px] sm:text-[10px] font-medium text-[#5D3A3A] dark:text-[#F4F0E8]">
           {title}
         </p>
-
-        <p
-          className="
-            mt-0.5
-            text-[7px] sm:text-[8px]
-            text-[#8B6F6F]
-            dark:text-white/40
-          "
-        >
+        <p className="mt-0.5 text-[7px] sm:text-[8px] text-[#8B6F6F] dark:text-white/40">
           این هفته {bookings}
         </p>
       </div>
 
       <div
         className={`
-          flex h-5 w-5 shrink-0
-          items-center justify-center
-          rounded-full text-[8px] font-bold
-          shadow-sm
+          flex h-5 w-5 shrink-0 items-center justify-center
+          rounded-full text-[8px] font-bold shadow-sm
           ${rankColors[rank] || "bg-[#C9A87C]/20 text-[#C9A87C]"}
         `}
       >
