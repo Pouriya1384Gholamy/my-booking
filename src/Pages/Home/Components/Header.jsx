@@ -79,7 +79,7 @@ const NAV_ITEMS = [
 ];
 
 /* ============================================================
-   💇‍♀️ داده‌های خدمات محبوب (نسخه جدید)
+   💇‍♀️ داده‌های خدمات محبوب
    ============================================================ */
 
 const SERVICES = [
@@ -211,7 +211,7 @@ function ServiceArch({ service, selected, onSelect }) {
 }
 
 /* ============================================================
-   🌟 بخش خدمات محبوب (کامپوننت جدید)
+   🌟 بخش خدمات محبوب
    ============================================================ */
 
 function PopularServices() {
@@ -223,7 +223,7 @@ function PopularServices() {
 
   return (
     <section
-      className="mt-8 sm:mt-10"
+      className="mt-6 sm:mt-8"
       dir="rtl"
       aria-labelledby="popular-services-title"
     >
@@ -690,13 +690,13 @@ function Header() {
             <div
               className="
                 grid gap-6 sm:gap-7
-                md:grid-cols-[1fr_290px] md:items-center md:gap-8
+                md:grid-cols-[1fr_290px] md:items-start md:gap-8
                 lg:grid-cols-[1fr_340px]
               "
               dir="rtl"
             >
-              {/* TEXT + SEARCH */}
-              <div>
+              {/* SEARCH + خدمات محبوب (بلافاصله بعد از سرچ) */}
+              <div className="min-w-0">
                 <div className="mt-2 sm:mt-4 flex gap-2 sm:gap-2.5">
                   <div
                     className="
@@ -741,15 +741,14 @@ function Header() {
                     <FaSlidersH className="text-xs sm:text-sm" />
                   </button>
                 </div>
+
+                {/* ✨ خدمات محبوب — درست زیر سرچ باکس */}
+                <PopularServices />
               </div>
 
               {/* ================= BEAUTY DASHBOARD ================= */}
               <BeautyDashboardCard />
             </div>
-
-            {/* ================= ✨ بخش جدید: خدمات محبوب ================= */}
-            <PopularServices />
-            {/* ================= پایان بخش خدمات محبوب ================= */}
           </div>
 
           {/* ================= BOTTOM CURVE ================= */}
