@@ -14,6 +14,8 @@ import {
   FaCheck,
   FaSun,
   FaMoon,
+  FaChevronLeft,
+  FaChevronRight,
 } from "react-icons/fa";
 
 /* ============================================================
@@ -34,9 +36,18 @@ const WEEKDAYS = [
 ];
 
 const TIME_SLOTS = [
-  "09:00", "10:30", "11:00", "12:00",
-  "13:00", "14:30", "16:00", "17:30", "18:30",
+  // صبح
+  "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30",
+  // ظهر و عصر
+  "12:30", "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00",
+  "16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30",
 ];
+
+const MORNING_SLOTS = TIME_SLOTS.filter((slot) => slot < "12:30");
+const EVENING_SLOTS = TIME_SLOTS.filter((slot) => slot >= "12:30");
+
+// هر صفحه‌ی اسلایدر ساعت: ۳ ستون × ۲ ردیف
+const SLIDER_PAGE_SIZE = 6;
 
 const jalaliFormatter = new Intl.DateTimeFormat("en-US-u-ca-persian", {
   year: "numeric",
@@ -322,47 +333,149 @@ function DayCard({ day, distance, selected, onClick }) {
 }
 
 /* ============================================================
-   گروه ساعت‌ها (صبح / عصر) — سبک و بدون کارت اضافه
+   اسلایدر ساعت‌ها — ۳ ستون × ۲ ردیف در هر صفحه + پگینیشن
    ============================================================ */
 
-function TimeGroup({ icon, title, slots, time, isSlotPast, onSelect }) {
+function TimeSlider({ icon, title, slots, time, isSlotPast, onSelect }) {
+  const trackRef = useRef(null);
+  const pageRefs = useRef([]);
+  const [page, setPage] = useState(0);
+
+  const pages = useMemo(() => {
+    const out = [];
+    for (let i = 0; i < slots.length; i += SLIDER_PAGE_SIZE) {
+      out.push(slots.slice(i, i + SLIDER_PAGE_SIZE));
+    }
+    return out;
+  }, [slots]);
+
+  const lastPage = pages.length - 1;
+
+  const goToPage = (index, behavior = "smooth") => {
+    const track = trackRef.current;
+    const el = pageRefs.current[index];
+    if (!track || !el) return;
+    const delta =
+      el.getBoundingClientRect().left - track.getBoundingClientRect().left;
+    track.scrollBy({ left: delta, behavior });
+  };
+
+  const handleScroll = () => {
+    const track = trackRef.current;
+    if (!track || !track.clientWidth) return;
+    const index = Math.round(Math.abs(track.scrollLeft) / track.clientWidth);
+    setPage(Math.min(lastPage, Math.max(0, index)));
+  };
+
+  // اگه ساعت انتخابی توی صفحه‌ی دیگه‌ای بود، اسلایدر بره همون صفحه
+  useEffect(() => {
+    const index = pages.findIndex((p) => p.includes(time));
+    if (index >= 0 && index !== page) goToPage(index);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [time]);
+
   if (slots.length === 0) return null;
+
+  const arrowClass =
+    "flex h-7 w-7 items-center justify-center rounded-full bg-[#F8F3EE] text-[10px] text-[#A47D54] transition hover:bg-[#C9A87C]/20 active:scale-90 disabled:opacity-30 disabled:hover:bg-[#F8F3EE] dark:bg-white/10";
 
   return (
     <div>
-      <p className="mb-2.5 flex items-center gap-1.5 text-xs font-medium text-[#9B8578] dark:text-white/50">
-        <span className="text-[11px] text-[#B8956A]">{icon}</span>
-        {title}
-      </p>
+      {/* هدر گروه + شمارنده + فلش‌ها */}
+      <div className="mb-3 flex items-center justify-between">
+        <p className="flex items-center gap-1.5 text-xs font-medium text-[#9B8578] dark:text-white/50">
+          <span className="text-[11px] text-[#B8956A]">{icon}</span>
+          {title}
+        </p>
 
-      <div className="grid grid-cols-3 gap-2">
-        {slots.map((slot) => {
-          const active = time === slot;
-          const past = isSlotPast(slot);
-          return (
+        {pages.length > 1 && (
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] tabular-nums text-[#A28E81] dark:text-white/40">
+              {toFa(page + 1)} / {toFa(pages.length)}
+            </span>
             <button
-              key={slot}
               type="button"
-              disabled={past}
-              onClick={() => onSelect(slot)}
-              aria-pressed={active}
-              className={`
-                rounded-xl py-3 text-xs transition-all duration-200
-                active:scale-[0.97]
-                ${
-                  past
-                    ? "cursor-not-allowed bg-[#F5F0EB] text-[#B8AAA0] opacity-45 dark:bg-white/5 dark:text-white/20"
-                    : active
-                    ? "bg-gradient-to-l from-[#C9A87C] to-[#AD875B] font-bold text-white shadow-[0_8px_18px_rgba(184,149,106,0.3)]"
-                    : "bg-[#F8F3EE] text-[#846F62] hover:bg-[#C9A87C]/15 dark:bg-white/5 dark:text-white/65"
-                }
-              `}
+              aria-label="صفحه‌ی قبلی"
+              disabled={page === 0}
+              onClick={() => goToPage(page - 1)}
+              className={arrowClass}
             >
-              {toFa(slot)}
+              <FaChevronRight />
             </button>
-          );
-        })}
+            <button
+              type="button"
+              aria-label="صفحه‌ی بعدی"
+              disabled={page === lastPage}
+              onClick={() => goToPage(page + 1)}
+              className={arrowClass}
+            >
+              <FaChevronLeft />
+            </button>
+          </div>
+        )}
       </div>
+
+      {/* ترک اسلایدر */}
+      <div
+        ref={trackRef}
+        onScroll={handleScroll}
+        className="flex snap-x snap-mandatory overflow-x-auto overscroll-x-contain [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+      >
+        {pages.map((pageSlots, i) => (
+          <div
+            key={i}
+            ref={(el) => (pageRefs.current[i] = el)}
+            className="grid w-full shrink-0 snap-start grid-cols-3 grid-rows-2 gap-2"
+          >
+            {pageSlots.map((slot) => {
+              const active = time === slot;
+              const past = isSlotPast(slot);
+              return (
+                <button
+                  key={slot}
+                  type="button"
+                  disabled={past}
+                  onClick={() => onSelect(slot)}
+                  aria-pressed={active}
+                  className={`
+                    h-11 rounded-xl text-xs transition-all duration-200
+                    active:scale-[0.97]
+                    ${
+                      past
+                        ? "cursor-not-allowed bg-[#F5F0EB] text-[#B8AAA0] opacity-45 dark:bg-white/5 dark:text-white/20"
+                        : active
+                        ? "bg-gradient-to-l from-[#C9A87C] to-[#AD875B] font-bold text-white shadow-[0_8px_18px_rgba(184,149,106,0.3)]"
+                        : "bg-[#F8F3EE] text-[#846F62] hover:bg-[#C9A87C]/15 dark:bg-white/5 dark:text-white/65"
+                    }
+                  `}
+                >
+                  {toFa(slot)}
+                </button>
+              );
+            })}
+          </div>
+        ))}
+      </div>
+
+      {/* نقطه‌های پگینیشن */}
+      {pages.length > 1 && (
+        <div className="mt-3 flex items-center justify-center gap-1.5">
+          {pages.map((_, i) => (
+            <button
+              key={i}
+              type="button"
+              aria-label={`صفحه ${toFa(i + 1)}`}
+              aria-current={i === page}
+              onClick={() => goToPage(i)}
+              className={`h-1.5 rounded-full transition-all duration-300 ${
+                i === page
+                  ? "w-5 bg-[#C9A87C]"
+                  : "w-1.5 bg-[#C9A87C]/30 hover:bg-[#C9A87C]/60"
+              }`}
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -393,7 +506,7 @@ function Reservation() {
 
   const [selectedKey, setSelectedKey] = useState(todayKey);
   const [monthIdx, setMonthIdx] = useState(currentMonthIdx);
-  const [time, setTime] = useState(TIME_SLOTS[0]);
+  const [time, setTime] = useState("10:30");
   const [liked, setLiked] = useState(false);
   const [booked, setBooked] = useState(false);
 
@@ -524,9 +637,6 @@ function Reservation() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedKey]);
-
-  const morningSlots = TIME_SLOTS.filter((slot) => slot < "12:30");
-  const eveningSlots = TIME_SLOTS.filter((slot) => slot >= "12:30");
 
   const handleSelectTime = (slot) => {
     setTime(slot);
@@ -735,18 +845,18 @@ function Reservation() {
           </h2>
 
           <div className="mt-4 space-y-5">
-            <TimeGroup
+            <TimeSlider
               icon={<FaSun />}
               title="صبح"
-              slots={morningSlots}
+              slots={MORNING_SLOTS}
               time={time}
               isSlotPast={isSlotPast}
               onSelect={handleSelectTime}
             />
-            <TimeGroup
+            <TimeSlider
               icon={<FaMoon />}
               title="ظهر و عصر"
-              slots={eveningSlots}
+              slots={EVENING_SLOTS}
               time={time}
               isSlotPast={isSlotPast}
               onSelect={handleSelectTime}
