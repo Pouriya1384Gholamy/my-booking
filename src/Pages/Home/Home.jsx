@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Header from "./Components/Header";
 import PopularServices from "./Components/PopularServices";
-import BeautyDashboard from "./Components/BeautyDashboard";
+
 import StylistsSlider from "./Components/StylistsSlider";
 import Navigation from "./Components/Navigation";
 
@@ -51,7 +51,7 @@ export default function Home() {
               </div>
 
               {/* ستون دوم (سمت چپ در RTL): داشبورد */}
-              <BeautyDashboard />
+              
             </div>
 
             {/* STYLISTS SLIDER */}

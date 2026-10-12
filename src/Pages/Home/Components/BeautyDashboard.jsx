@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+```import React, { useState } from "react";
 import {
   FaHeart,
   FaClock,
@@ -255,4 +255,4 @@ export default function BeautyDashboard() {
       </div>
     </div>
   );
-}
+}```
