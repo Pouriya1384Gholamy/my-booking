@@ -6,9 +6,7 @@ import {
   FaRegHeart,
   FaStar,
   FaRegStar,
-  FaRegCommentDots,
   FaPhoneAlt,
-  FaVideo,
   FaHistory,
   FaUserFriends,
   FaCheck,
@@ -18,6 +16,8 @@ import {
   FaChevronRight,
   FaCalendarAlt,
   FaTimes,
+  FaShareAlt,
+  FaMapMarkerAlt,
 } from "react-icons/fa";
 
 /* ============================================================
@@ -227,16 +227,17 @@ function DateReadout({ day, direction, relativeLabel }) {
 }
 
 /* ============================================================
-   مودال تقویم (Calendar Modal) — طراحی اپلیکیشن‌گونه و مینیمال
+   مودال تقویم — بهینه‌سازی شده برای موبایل (بدون اسکرول اضافه)
    ============================================================ */
 function CalendarModal({ isOpen, onClose, months, selectedKey, onSelect, todayKey, currentMonthIdx }) {
   const [viewMonthIdx, setViewMonthIdx] = useState(currentMonthIdx);
-  const modalRef = useRef(null);
+  const [tempSelectedKey, setTempSelectedKey] = useState(selectedKey);
 
   useEffect(() => {
     if (isOpen) {
       const idx = months.findIndex((m) => m.days.some((d) => d.key === selectedKey));
       if (idx >= 0) setViewMonthIdx(idx);
+      setTempSelectedKey(selectedKey);
     }
   }, [isOpen, selectedKey, months]);
 
@@ -260,9 +261,19 @@ function CalendarModal({ isOpen, onClose, months, selectedKey, onSelect, todayKe
   const firstDayWeekday = month.days[0]?.weekdayIndex ?? 0;
   const leadingBlanks = (firstDayWeekday + 1) % 7;
 
+  const handleConfirm = () => {
+    const selectedDay = months
+      .flatMap((m) => m.days)
+      .find((d) => d.key === tempSelectedKey);
+    if (selectedDay) {
+      onSelect(selectedDay);
+    }
+    onClose();
+  };
+
   return (
     <div
-      className="fixed inset-0 z-50 flex items-center justify-center p-4"
+      className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4"
       style={{ animation: "backdropIn 250ms ease-out both" }}
     >
       <div
@@ -271,46 +282,46 @@ function CalendarModal({ isOpen, onClose, months, selectedKey, onSelect, todayKe
         aria-hidden="true"
       />
 
+      {/* مودال با max-h برای جلوگیری از اسکرول اضافه در موبایل */}
       <div
-        ref={modalRef}
         role="dialog"
         aria-modal="true"
         aria-label="انتخاب تاریخ"
-        className="relative z-10 w-full max-w-sm overflow-hidden rounded-3xl border border-[#EFE4DC] bg-[#FFFCFA] shadow-[0_30px_80px_rgba(42,29,24,0.35)] dark:border-white/[0.08] dark:bg-[#201C1A]"
+        className="relative z-10 flex max-h-[85vh] w-full max-w-xs flex-col overflow-hidden rounded-3xl border border-[#EFE4DC] bg-[#FFFCFA] shadow-[0_30px_80px_rgba(42,29,24,0.35)] dark:border-white/[0.08] dark:bg-[#201C1A] sm:max-w-sm"
         style={{ animation: "modalIn 300ms cubic-bezier(0.22, 1, 0.36, 1) both" }}
       >
         {/* Header */}
-        <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          <h3 className="text-sm font-black text-[#4B302A] dark:text-[#F4EDE5]">
+        <div className="flex shrink-0 items-center justify-between px-4 pt-4 pb-2 sm:px-5 sm:pt-5 sm:pb-3">
+          <h3 className="text-xs font-black text-[#4B302A] dark:text-[#F4EDE5] sm:text-sm">
             انتخاب تاریخ
           </h3>
           <button
             type="button"
             onClick={onClose}
             aria-label="بستن"
-            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F5EDE6] text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-90 dark:bg-white/[0.06]"
+            className="flex h-6 w-6 items-center justify-center rounded-full bg-[#F5EDE6] text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-90 dark:bg-white/[0.06] sm:h-7 sm:w-7"
           >
-            <FaTimes className="text-[10px]" />
+            <FaTimes className="text-[9px] sm:text-[10px]" />
           </button>
         </div>
 
         {/* Month Navigation */}
-        <div className="flex items-center justify-between px-5 py-2">
+        <div className="flex shrink-0 items-center justify-between px-4 py-1.5 sm:px-5 sm:py-2">
           <button
             type="button"
             onClick={() => canGoPrev && setViewMonthIdx(viewMonthIdx - 1)}
             disabled={!canGoPrev}
             aria-label="ماه قبل"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F8F3EE] text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-90 disabled:cursor-not-allowed disabled:opacity-30 dark:bg-white/[0.06]"
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F8F3EE] text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-90 disabled:cursor-not-allowed disabled:opacity-30 dark:bg-white/[0.06] sm:h-8 sm:w-8"
           >
-            <FaChevronRight className="text-[10px]" />
+            <FaChevronRight className="text-[9px] sm:text-[10px]" />
           </button>
 
           <div className="text-center">
-            <p className="text-sm font-black text-[#4B302A] dark:text-[#F4EDE5]">
+            <p className="text-xs font-black text-[#4B302A] dark:text-[#F4EDE5] sm:text-sm">
               {month.name}
             </p>
-            <p className="mt-0.5 text-[10px] text-[#A18A7B] dark:text-white/45">
+            <p className="mt-0.5 text-[9px] text-[#A18A7B] dark:text-white/45 sm:text-[10px]">
               {toFa(month.year)}
             </p>
           </div>
@@ -320,29 +331,29 @@ function CalendarModal({ isOpen, onClose, months, selectedKey, onSelect, todayKe
             onClick={() => canGoNext && setViewMonthIdx(viewMonthIdx + 1)}
             disabled={!canGoNext}
             aria-label="ماه بعد"
-            className="flex h-8 w-8 items-center justify-center rounded-full bg-[#F8F3EE] text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-90 disabled:cursor-not-allowed disabled:opacity-30 dark:bg-white/[0.06]"
+            className="flex h-7 w-7 items-center justify-center rounded-full bg-[#F8F3EE] text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-90 disabled:cursor-not-allowed disabled:opacity-30 dark:bg-white/[0.06] sm:h-8 sm:w-8"
           >
-            <FaChevronLeft className="text-[10px]" />
+            <FaChevronLeft className="text-[9px] sm:text-[10px]" />
           </button>
         </div>
 
         {/* Weekday Headers */}
-        <div className="grid grid-cols-7 gap-1 px-4 pb-1">
+        <div className="grid shrink-0 grid-cols-7 gap-0.5 px-3 pb-1 sm:gap-1 sm:px-4">
           {["ش", "ی", "د", "س", "چ", "پ", "ج"].map((day) => (
-            <div key={day} className="text-center text-[10px] font-bold text-[#A18A7B] dark:text-white/40">
+            <div key={day} className="text-center text-[10px] font-bold text-[#A18A7B] dark:text-white/40 sm:text-[11px]">
               {day}
             </div>
           ))}
         </div>
 
-        {/* Days Grid — اندازه‌های دقیقاً مطابق کد اصلی */}
-        <div className="grid grid-cols-7 gap-1 px-4 pb-4">
+        {/* Days Grid — فونت درشت‌تر (مخصوصاً دسکتاپ) */}
+        <div className="grid shrink-0 grid-cols-7 gap-0.5 px-3 pb-3 sm:gap-1 sm:px-4 sm:pb-4">
           {Array.from({ length: leadingBlanks }).map((_, i) => (
-            <div key={`blank-${i}`} className="h-10" />
+            <div key={`blank-${i}`} className="h-9 sm:h-11" />
           ))}
 
           {month.days.map((day) => {
-            const isSelected = day.key === selectedKey;
+            const isSelected = day.key === tempSelectedKey;
             const isPast = day.isPast;
             const isToday = day.isToday;
 
@@ -350,17 +361,14 @@ function CalendarModal({ isOpen, onClose, months, selectedKey, onSelect, todayKe
               <button
                 key={day.key}
                 type="button"
-                onClick={() => {
-                  if (!isPast) {
-                    onSelect(day);
-                    onClose();
-                  }
-                }}
+                onClick={() => !isPast && setTempSelectedKey(day.key)}
                 disabled={isPast}
                 aria-pressed={isSelected}
                 aria-label={`${day.weekday} ${day.jd} ${day.monthName}`}
                 className={`
-                  relative flex h-10 w-full items-center justify-center rounded-xl text-xs font-bold transition-all duration-200
+                  relative flex h-9 w-full items-center justify-center rounded-lg text-sm font-bold transition-all duration-200
+                  sm:h-11 sm:rounded-xl sm:text-base
+                  lg:text-lg
                   ${isSelected
                     ? "bg-gradient-to-br from-[#CDA783] to-[#A97754] text-white shadow-[0_6px_16px_rgba(184,149,106,0.35)]"
                     : isPast
@@ -373,11 +381,29 @@ function CalendarModal({ isOpen, onClose, months, selectedKey, onSelect, todayKe
               >
                 {toFa(day.jd)}
                 {isToday && !isSelected && (
-                  <span className="absolute bottom-1 h-1 w-1 rounded-full bg-[#C49A75]" />
+                  <span className="absolute bottom-0.5 h-1 w-1 rounded-full bg-[#C49A75] sm:bottom-1" />
                 )}
               </button>
             );
           })}
+        </div>
+
+        {/* Footer — دکمه تایید */}
+        <div className="flex shrink-0 items-center gap-2 border-t border-[#F0E6DF] px-4 py-2.5 dark:border-white/[0.06] sm:px-5 sm:py-3">
+          <button
+            type="button"
+            onClick={onClose}
+            className="flex-1 rounded-xl bg-[#F5EDE6] py-2 text-xs font-extrabold text-[#A47D54] transition hover:bg-[#EDDCCB] active:scale-[0.98] dark:bg-white/[0.06] dark:text-white/70 sm:py-2.5"
+          >
+            انصراف
+          </button>
+          <button
+            type="button"
+            onClick={handleConfirm}
+            className="flex-1 rounded-xl bg-gradient-to-l from-[#B78A65] to-[#8E6247] py-2 text-xs font-extrabold text-white shadow-[0_8px_18px_rgba(184,149,106,0.3)] transition hover:-translate-y-0.5 active:scale-[0.98] sm:py-2.5"
+          >
+            تایید
+          </button>
         </div>
       </div>
     </div>
@@ -603,6 +629,32 @@ function Reservation() {
     bookTimer.current = setTimeout(() => setBooked(false), 2500);
   };
 
+  /* ============================================================
+     اشتراک‌گذاری با Web Share API (شبیه آیفون)
+     ============================================================ */
+  const handleShare = async () => {
+    const shareData = {
+      title: `${stylist.name} - ${stylist.role}`,
+      text: `رزرو نوبت از ${stylist.name} (${stylist.role})`,
+      url: window.location.href,
+    };
+
+    try {
+      if (navigator.share) {
+        await navigator.share(shareData);
+      } else {
+        // Fallback برای مرورگرهای قدیمی: کپی لینک
+        await navigator.clipboard.writeText(window.location.href);
+        alert("لینک کپی شد! می‌تونی برای دوستانت بفرستی.");
+      }
+    } catch (err) {
+      // کاربر اشتراک‌گذاری را لغو کرد
+      if (err.name !== "AbortError") {
+        console.error("Share failed:", err);
+      }
+    }
+  };
+
   return (
     <div
       dir="rtl"
@@ -615,8 +667,8 @@ function Reservation() {
         {/* ستون راست: هدر و آمار */}
         <aside className="relative lg:col-span-4 lg:sticky lg:top-6 lg:h-[calc(100vh-3rem)] lg:overflow-hidden lg:rounded-r-[38px] lg:border-l lg:border-[#EDE2DA] lg:bg-[#FBF6F2] lg:self-start dark:lg:border-white/[0.07] dark:lg:bg-[#211D1B]">
           
-          {/* HERO — ارتفاع بیشتر */}
-          <section className="relative z-10 h-[400px] overflow-hidden rounded-b-[30px] shadow-[0_18px_44px_rgba(70,43,31,0.20)] sm:h-[460px] sm:rounded-b-[34px] lg:h-[65%] lg:rounded-b-none lg:rounded-tr-[38px]">
+          {/* HERO */}
+          <section className="relative z-10 h-[400px] overflow-hidden rounded-b-[30px] shadow-[0_18px_44px_rgba(70,43,31,0.20)] sm:h-[460px] sm:rounded-b-[34px] lg:h-[60%] lg:rounded-b-none lg:rounded-tr-[38px]">
             <img
               src={stylist.img || FALLBACK_STYLIST.img}
               alt={stylist.name}
@@ -643,6 +695,7 @@ function Reservation() {
               {liked ? <FaHeart className="text-sm text-[#F2B9BE]" /> : <FaRegHeart className="text-sm text-white" />}
             </button>
 
+            {/* اطلاعات آرایشگر + آیکون‌ها */}
             <div className="absolute bottom-6 left-5 right-5 flex items-end justify-between gap-3 sm:bottom-7 sm:left-6 sm:right-6">
               <div className="min-w-0 text-white">
                 <h1 className="truncate text-2xl font-black tracking-tight drop-shadow-md sm:text-3xl">
@@ -658,28 +711,39 @@ function Reservation() {
                 </div>
               </div>
 
+              {/* آیکون‌ها: تماس، موقعیت، اشتراک‌گذاری */}
               <div className="flex shrink-0 items-center gap-2">
-                {[
-                  { icon: <FaRegCommentDots />, label: "پیام" },
-                  { icon: <FaPhoneAlt />, label: "تماس" },
-                  { icon: <FaVideo />, label: "تماس تصویری" },
-                ].map((action) => (
-                  <button
-                    key={action.label}
-                    type="button"
-                    aria-label={action.label}
-                    title={action.label}
-                    className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-xs text-[#A47D54] shadow-lg transition hover:-translate-y-0.5 hover:bg-white active:scale-95"
-                  >
-                    {action.icon}
-                  </button>
-                ))}
+                <button
+                  type="button"
+                  aria-label="تماس"
+                  title="تماس"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-xs text-[#A47D54] shadow-lg transition hover:-translate-y-0.5 hover:bg-white active:scale-95"
+                >
+                  <FaPhoneAlt />
+                </button>
+                <button
+                  type="button"
+                  aria-label="موقعیت مکانی"
+                  title="موقعیت مکانی"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-xs text-[#A47D54] shadow-lg transition hover:-translate-y-0.5 hover:bg-white active:scale-95"
+                >
+                  <FaMapMarkerAlt />
+                </button>
+                <button
+                  type="button"
+                  onClick={handleShare}
+                  aria-label="اشتراک‌گذاری"
+                  title="اشتراک‌گذاری"
+                  className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 text-xs text-[#A47D54] shadow-lg transition hover:-translate-y-0.5 hover:bg-white active:scale-95"
+                >
+                  <FaShareAlt />
+                </button>
               </div>
             </div>
           </section>
 
-          {/* STATS */}
-          <section className="rounded-b-[30px] bg-[#FBF6F2] px-5 pb-7 pt-6 transition-colors duration-500 dark:bg-[#211D1B] sm:px-6 lg:h-[35%] lg:rounded-b-none lg:bg-transparent lg:px-7 lg:py-8 lg:dark:bg-transparent">
+          {/* STATS — زیر اطلاعات آرایشگر (زیر "پوست و مو") */}
+          <section className="rounded-b-[30px] bg-[#FBF6F2] px-5 pb-7 pt-6 transition-colors duration-500 dark:bg-[#211D1B] sm:px-6 lg:h-[40%] lg:rounded-b-none lg:bg-transparent lg:px-7 lg:py-8 lg:dark:bg-transparent">
             <div className="grid grid-cols-3 gap-2.5 lg:grid-cols-1 lg:gap-4">
               {[
                 { icon: <FaHistory />, value: toFa(stylist.experience ?? 8), label: "سال تجربه" },
@@ -725,7 +789,6 @@ function Reservation() {
               <div className="mt-4 flex items-center justify-between gap-3">
                 <DateReadout day={selectedDay} direction={direction} relativeLabel={relativeLabel} />
 
-                {/* دکمه مینیمال تقویم */}
                 <button
                   type="button"
                   onClick={() => setCalendarOpen(true)}
