@@ -1,3 +1,8 @@
+import style1 from "../../assets/img/styleist1.jpeg";
+import style2 from "../../assets/img/styleist2.jpeg";
+import style3 from "../../assets/img/styleist3.jpeg";
+import style4 from "../../assets/img/styleist4.png";
+
 import React from "react";
 import {
   FaCut,
@@ -75,10 +80,64 @@ export const SERVICES = [
 
 /* ============ STYLISTS ============ */
 export const STYLISTS = [
-  { id: 1, name: "سارا احمدی", role: "متخصص رنگ و مش", rating: 4.9, reviews: 240, img: "https://i.pravatar.cc/300?img=5", next: "امروز ۱۶:۰۰", available: true },
-  { id: 2, name: "نیلوفر کرمی", role: "میکاپ آرتیست", rating: 4.8, reviews: 186, img: "https://i.pravatar.cc/300?img=9", next: "امروز ۱۸:۳۰", available: true },
-  { id: 3, name: "مهسا رضایی", role: "متخصص ناخن", rating: 4.7, reviews: 131, img: "https://i.pravatar.cc/300?img=16", next: "فردا ۱۰:۰۰", available: false },
-  { id: 4, name: "الهام صادقی", role: "پوست و مو", rating: 5.0, reviews: 98, img: "https://i.pravatar.cc/300?img=20", next: "امروز ۱۷:۰۰", available: true },
-  { id: 5, name: "ریحانه موسوی", role: "شینیون و کوتاهی", rating: 4.8, reviews: 207, img: "https://i.pravatar.cc/300?img=23", next: "فردا ۱۱:۳۰", available: false },
-  { id: 6, name: "پریسا نوری", role: "ابرو و مژه", rating: 4.9, reviews: 154, img: "https://i.pravatar.cc/300?img=32", next: "امروز ۱۹:۰۰", available: true },
+  { 
+    id: 1, 
+    name: "سارا احمدی", 
+    role: "متخصص رنگ و مش", 
+    rating: 4.9, 
+    reviews: 240, 
+    img: style3, 
+    next: "امروز ۱۶:۰۰", 
+    available: true 
+  },
+  { 
+    id: 2, 
+    name: "نیلوفر کرمی", 
+    role: "میکاپ آرتیست", 
+    rating: 4.8, 
+    reviews: 186, 
+    img: style4, 
+    next: "امروز ۱۸:۳۰", 
+    available: true 
+  },
+  { 
+    id: 3, 
+    name: "مهسا رضایی", 
+    role: "متخصص ناخن", 
+    rating: 4.7, 
+    reviews: 131, 
+    img: style1, 
+    next: "فردا ۱۰:۰۰", 
+    available: false 
+  },
+  { 
+    id: 4, 
+    name: "الهام صادقی", 
+    role: "پوست و مو", 
+    rating: 5.0, 
+    reviews: 98, 
+    img: style2, 
+    next: "امروز ۱۷:۰۰", 
+    available: true 
+  },
+  { 
+    id: 5, 
+    name: "ریحانه موسوی", 
+    role: "شینیون و کوتاهی", 
+    rating: 4.8, 
+    reviews: 207, 
+    img: style3, 
+    next: "فردا ۱۱:۳۰", 
+    available: false 
+  },
+  { 
+    id: 6, 
+    name: "پریسا نوری", 
+    role: "ابرو و مژه", 
+    rating: 4.9, 
+    reviews: 154, 
+    img: style4, 
+    next: "امروز ۱۹:۰۰", 
+    available: true 
+  },
 ];
